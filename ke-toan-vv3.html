@@ -1202,10 +1202,9 @@ function chatHTML(w) {
   if (!th.length) {
     const td = aiTodos(a.id);
     return `<div class="ac">${head}<div class="msgs"><div class="hi">${aav(a)}<h2>Chào Hạnh, mình là ${esc(a.name)}</h2><div class="tag" style="font-size:14px">${isGrp(a.id) ? "Giao việc cho cả nhóm — Arion chia cho agent phù hợp: lập chứng từ, công nợ, thuế." : esc(INTRO[a.id] || a.desc)}</div>
-      <div style="margin-top:18px">${boxHTML(w)}</div>
-      <div class="slbl">Câu hỏi thường dùng</div><div class="qs">${quickOf(a.id).map((q) => `<button data-ai="ask" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
+      <div class="slbl" style="margin-top:24px">Câu hỏi thường dùng</div><div class="qs">${quickOf(a.id).map((q) => `<button data-ai="ask" data-q="${esc(q)}">${esc(q)}</button>`).join("")}</div>
       ${td.length ? `<div class="slbl">AI gợi ý việc cần làm hôm nay</div><div class="todo">${td.map(([i, t, d, q, h]) => `<button data-ai="${q ? "ask" : "go"}" data-q="${esc(q || "")}" data-h="${h || ""}"><span class="ki">${ic(i)}</span><span><b>${esc(t)}</b><small>${esc(d)}</small></span></button>`).join("")}</div>` : ""}
-    </div></div></div>`;
+    </div></div><div class="cfoot"><div style="max-width:760px;margin:0 auto">${boxHTML(w)}</div></div></div>`;
   }
   const msgs = th.map((m) => m.me ? `<div class="bme">${esc(m.text)}${m.file ? `<div style="margin-top:6px;opacity:.9;font-size:12.5px">📄 ${esc(m.file)}</div>` : ""}</div>`
     : `<div class="bai">${aav(agOf(m.agent), true)}<div class="bb"><div class="tag" style="margin-bottom:4px">${esc(agOf(m.agent).name)}${m.via ? " · Arion giao việc" : ""}</div>${m.thinking ? `<span class="tag dots">${esc(m.thinking)}</span>` : m.html}</div></div>`).join("");
