@@ -1,4 +1,4 @@
-<title>Kế toán Việt Vương 3</title>
+<title>Kế toán</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap">
@@ -302,7 +302,7 @@ button.km:hover{border-color:var(--brand);background:var(--brand-soft)}
 
 <div class="app">
   <aside class="side">
-    <div class="logo"><b>V3</b><div><div class="t">Kế toán</div><div class="s">Mini app · Việt Vương 3</div></div></div>
+    <div class="logo"><b>KT</b><div><div class="t">Kế toán</div></div></div>
     <nav class="nav" id="nav"></nav>
     <div class="user"><span class="av" id="uav">H</span><span id="uname">Kế toán Hạnh</span></div>
   </aside>
@@ -675,7 +675,7 @@ function vDash() {
     ["canxuly", "pur", "Đã bị thay thế / điều chỉnh / hủy", c((i) => i.step === "canxuly" && ["thaythe", "dieuchinh", "huy"].includes(i.portal))],
     ["daduyet", "gray", "Đã duyệt, chưa xuất file", c((i) => i.step === "daduyet")],
   ];
-  return `<div class="top"><div><h1>Chào buổi sáng, Hạnh</h1><div class="sub">Tình hình tài chính Việt Vương 3 · số liệu sổ cái tới <b>${S.ledgerTo}</b></div></div>
+  return `<div class="top"><div><h1>Chào buổi sáng, Hạnh</h1><div class="sub">Tình hình tài chính · số liệu sổ cái tới <b>${S.ledgerTo}</b></div></div>
   ${perSel("per")}<button class="btn" data-act="ledger">${ic("up")}Cập nhật sổ cái / sổ chi tiết</button></div>
   <div class="kpis">
     <div class="card kpi go" data-act="dashdir" data-d="Bán ra" tabindex="0" role="button"><div class="k">Doanh thu T10</div><div class="v">6,42 tỷ</div><div class="d"><span style="color:var(--ok)">▲ 8,1%</span> so T9</div></div>
