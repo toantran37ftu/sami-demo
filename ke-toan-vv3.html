@@ -271,7 +271,7 @@ button.km:hover{border-color:var(--brand);background:var(--brand-soft)}
 .bme{align-self:flex-end;max-width:78%;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;border-radius:16px 16px 4px 16px;padding:10px 14px;line-height:1.5;white-space:pre-wrap}
 .bai{display:flex;gap:10px;max-width:94%}
 .bb{flex:1;min-width:0;border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 14px;line-height:1.55;background:var(--card)}
-.bb table{margin:8px 0;border:1px solid var(--line2);border-radius:10px;font-size:13px}
+.bb table{font-size:13px}.bb .tw{overflow-x:auto;overscroll-behavior-x:contain;margin:8px 0;border:1px solid var(--line2);border-radius:10px}
 .bb .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 .dots::after{content:"";animation:dots 1.2s steps(4) infinite}@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
 .cbox{display:flex;gap:8px;align-items:flex-end;border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 10px;background:var(--card);box-shadow:var(--shadow-sm)}
@@ -1207,7 +1207,7 @@ function chatHTML(w) {
     </div></div><div class="cfoot"><div style="max-width:760px;margin:0 auto">${boxHTML(w)}</div></div></div>`;
   }
   const msgs = th.map((m) => m.me ? `<div class="bme">${esc(m.text)}${m.file ? `<div style="margin-top:6px;opacity:.9;font-size:12.5px">📄 ${esc(m.file)}</div>` : ""}</div>`
-    : `<div class="bai">${aav(agOf(m.agent), true)}<div class="bb"><div class="tag" style="margin-bottom:4px">${esc(agOf(m.agent).name)}${m.via ? " · Arion giao việc" : ""}</div>${m.thinking ? `<span class="tag dots">${esc(m.thinking)}</span>` : m.html}</div></div>`).join("");
+    : `<div class="bai">${aav(agOf(m.agent), true)}<div class="bb"><div class="tag" style="margin-bottom:4px">${esc(agOf(m.agent).name)}${m.via ? " · Arion giao việc" : ""}</div>${m.thinking ? `<span class="tag dots">${esc(m.thinking)}</span>` : m.html.replace(/<table/g, '<div class="tw"><table').replace(/<\/table>/g, "</table></div>")}</div></div>`).join("");
   return `<div class="ac">${head}<div class="msgs">${msgs}</div><div class="cfoot">${boxHTML(w)}</div></div>`;
 }
 function vAI() { return `<div class="aiw"><section style="min-width:0;min-height:0;overflow:hidden" id="ai-page">${chatHTML("page")}</section></div>`; }
