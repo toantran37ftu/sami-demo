@@ -26,7 +26,7 @@ Bộ nguyên tắc dưới đây có 3 mức: **Bắt buộc** (thiếu là bị
 | B2 | Thứ tự cột chuẩn: **Ngày hạch toán · Ngày chứng từ · Số chứng từ · Diễn giải · Số tiền · Đối tượng · Trạng thái** | Bắt buộc | Kế toán dò cột theo trí nhớ cơ |
 | B3 | **Dòng tổng cộng** ở đáy lưới, luôn thấy | Bắt buộc | Dùng để đối chiếu nhanh với sổ |
 | B4 | **Thanh công cụ trên lưới**: Thêm · Sửa/Xem · Xóa · Ghi sổ/Bỏ ghi · Nhân bản · In · Xuất Excel · Nạp. Nút tác động lên dòng đang chọn | Bắt buộc | AMIS: nút Thêm có ▾ (Nhập khẩu Excel) |
-| B5 | **Click = chọn dòng, double-click / Enter = mở**. Mũi tên lên/xuống để di chuyển | Bắt buộc | Click mở ngay là thói quen web, kế toán thấy "lỡ tay" |
+| B5 | **Bấm dòng là mở chi tiết** (không bắt bấm nút Xem); ↑↓ chọn dòng, Enter mở | Bắt buộc | Đổi sau góp ý: bấm nút Xem mới vào là thừa một bước |
 | B6 | **Ngăn chi tiết phía dưới** (master–detail): chọn chứng từ là thấy các dòng hạch toán, không cần mở | Bắt buộc | AMIS: thanh Mở rộng / Thu gọn ở đáy danh sách |
 | B7 | Lọc theo **kỳ** (Tháng này, Quý này, Từ ngày–Đến ngày), tìm theo số CT / đối tượng / MST | Bắt buộc | |
 | B8 | Trạng thái bằng **chữ**: "Đã ghi sổ / Chưa ghi sổ"; chứng từ chưa ghi sổ chữ màu đỏ/đậm | Nên có | |
@@ -101,6 +101,11 @@ UX tốt hơn MISA (giữ khuôn, thêm tiện):
 - Ngăn hạch toán dưới danh sách cập nhật khi chọn dòng, không cần mở chứng từ.
 - Chứng từ gốc (PDF/ảnh) đặt cạnh form để so khi nhập; AI điền sẵn, ô AI điền có đánh dấu.
 - "Theo bước" (Kanban) là chế độ xem phụ để dọn hàng chờ duyệt.
+
+Vòng 3 (góp ý UX):
+- Danh sách: **Trạng thái và Cổng thuế đưa lên đầu bảng** (nhãn ngắn), bảng vừa màn 1366px không phải kéo ngang; bấm dòng là mở chi tiết; cột cuối chỉ còn ▾ cho thao tác phụ.
+- Chi tiết: **Kiểm tra hóa đơn luôn hiện ở đầu trang** (không giấu trong tab), mục thiếu tô đỏ kèm nút xử lý ngay (Bổ sung file, Đã xử lý xong, Duyệt…).
+- Chi tiết: **tổng tiền đặt ngay dưới các dòng hàng như trên hóa đơn**: Cộng tiền hàng → Thuế suất / Tiền thuế → Tổng cộng tiền thanh toán → Số tiền viết bằng chữ.
 
 Chưa làm (để vòng sau): tab Quy trình cho từng phân hệ (A3), ẩn/hiện cột (B10), xóa / nhân bản / in chứng từ, lọc theo từng cột.
 
