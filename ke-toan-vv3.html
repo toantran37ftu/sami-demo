@@ -298,13 +298,130 @@ button.km:hover{border-color:var(--brand);background:var(--brand-soft)}
 .aipanel{position:fixed;top:12px;right:12px;bottom:12px;width:min(460px,calc(100vw - 24px));background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow-lg);z-index:24;overflow:hidden}
 .aipanel .hi{padding:18px 18px 4px}.aipanel .msgs{padding:16px}.aipanel .cfoot{padding:10px 14px 14px}.aipanel .todo{grid-template-columns:1fr}
 @media (max-width:900px){.aiw{grid-template-columns:1fr;height:auto}.ail{border-right:0;border-bottom:1px solid var(--line)}.ac{height:75vh}}
+
+/* ==== Giao diện kiểu phần mềm kế toán (MISA / Fast): phẳng, dày, lưới kẻ ô — xem docs/nguyen-tac-ui-ke-toan.md ==== */
+:root{--r:4px;--bg:#eef1f5;--card:#fff;--panel:#f5f7fa;--th:#eef2f7;--line:#d3d9e2;--line2:#e3e7ee;--ink:#1d2633;--mute:#5f6b7a;
+  --brand:#1867c0;--brand2:#1867c0;--brand-soft:#e6f0fb;--brand-ink:#0f4c94;--sel:#d7e8fb;--font:"Segoe UI",Roboto,"Inter",system-ui,sans-serif;--display:var(--font)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0f1319;--card:#161b23;--panel:#1b212b;--th:#1d2430;--line:#2c3543;--line2:#232b37;--brand:#4b9bf0;--brand2:#4b9bf0;--brand-soft:#132a44;--brand-ink:#a9cdf7;--sel:#173a60}}
+:root[data-theme="dark"]{--bg:#0f1319;--card:#161b23;--panel:#1b212b;--th:#1d2430;--line:#2c3543;--line2:#232b37;--brand:#4b9bf0;--brand2:#4b9bf0;--brand-soft:#132a44;--brand-ink:#a9cdf7;--sel:#173a60}
+body{font-size:13px;background:var(--bg)}
+kbd{font:600 11px var(--font);border:1px solid var(--line);border-bottom-width:2px;border-radius:3px;padding:0 4px;background:var(--panel);color:var(--mute)}
+/* thanh trên */
+.tb{position:sticky;top:0;z-index:15;height:46px;display:flex;align-items:center;gap:12px;padding:0 max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));background:var(--card);border-bottom:1px solid var(--line)}
+.tb .logo{padding:0;gap:8px;width:206px}.tb .logo b{width:28px;height:28px;border-radius:4px;background:var(--brand);box-shadow:none;font-size:11px}.tb .logo .t{font:600 15px var(--font)}
+.gs{flex:0 1 420px;min-width:0}.gs input{width:100%;border:1px solid var(--line);border-radius:3px;padding:5px 10px;background:var(--panel)}.gs input:focus{outline:none;border-color:var(--brand);background:var(--card)}
+.tbi{border:0;background:none;color:var(--mute);padding:5px 8px;border-radius:3px;white-space:nowrap}.tbi:hover{background:var(--panel);color:var(--ink)}.tbi b{color:var(--ink)}
+.tb .user{margin:0;padding:0 0 0 6px;background:none;box-shadow:none;border-radius:0;white-space:nowrap}
+.av{background:var(--brand);border-radius:50%}
+/* khung */
+.app{padding:0;min-height:calc(100% - 46px)}
+.side{width:220px;padding:6px 0;top:46px;height:calc(100vh - 46px);background:var(--card);border-right:1px solid var(--line)}
+.side .modes{margin:4px 10px 8px}
+.grp{text-transform:none;letter-spacing:0;font-size:12px;color:var(--mute);padding:12px 16px 4px}
+.nav{margin:0;padding:0}
+.nav a{border-radius:0;padding:7px 16px;margin:0;font-weight:400;transition:none}
+.nav a:hover{background:var(--panel);box-shadow:none}
+.nav a.on{background:var(--brand-soft);color:var(--brand-ink);box-shadow:inset 3px 0 0 var(--brand);font-weight:600}
+.nav svg{width:16px;height:16px}.badge{border-radius:3px;font-size:11px;padding:0 6px}.nav a.on .badge{background:var(--brand);color:#fff}
+.main{border:0;border-radius:0;box-shadow:none;padding:12px 18px 40px;background:var(--bg)}
+.top{margin-bottom:10px;gap:8px}.top>div:first-child{min-width:200px}
+h1{font:600 19px/1.3 var(--font);letter-spacing:0}.sub{font-size:12.5px;margin-top:2px}
+h3,.h2,.sec{font-family:var(--font);font-weight:600;letter-spacing:0}.h2{font-size:14px}.sec::before,.h2::before{display:none}
+/* nút, ô nhập */
+.btn{border-radius:3px;padding:4px 11px;min-height:28px;box-shadow:none;font-weight:500;transition:none;gap:6px}
+.btn:hover{transform:none;border-color:var(--brand);background:var(--brand-soft)}
+.btn.p{background:var(--brand);color:#fff;box-shadow:none}.btn.p:hover{background:var(--brand-ink)}
+.btn.g{background:#1f8a3b;color:#fff;box-shadow:none}.btn.g:hover{background:#18722f}
+.btn kbd{margin-left:2px}.btn.p kbd,.btn.g kbd{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);color:#fff}
+.btn.s{padding:2px 8px;min-height:24px;border-radius:3px}
+.inp,select.inp{border-radius:3px;padding:4px 8px}.inp:focus{box-shadow:none}
+.bar{gap:8px;margin-bottom:8px}.main>.bar{border-radius:3px;padding:6px 8px;background:var(--card);border-color:var(--line)}
+.seg{border-radius:3px;padding:2px;background:var(--panel);border:1px solid var(--line)}.seg button{border-radius:2px;padding:3px 10px;font-weight:500}.seg button.on{box-shadow:none;background:var(--brand);color:#fff}
+/* thẻ */
+.card,.pane{border-radius:3px;box-shadow:none}
+.card>h3,.card>.hd{padding:8px 12px}
+.kpis{gap:10px;margin-bottom:10px}.kpi{padding:10px 12px}.kpi::after{display:none}.kpi .v{font:600 20px var(--font);margin-top:4px}
+.kpi.go:hover,.kc:hover{transform:none;box-shadow:none}
+.ki{border-radius:3px}
+.grid2{gap:10px;margin-bottom:10px}
+.note{border-radius:3px;padding:8px 12px;border:1px solid #b9d4f3}.note.y{border-color:#f0d08a}
+/* lưới kẻ ô */
+th{text-transform:none;letter-spacing:0;font-size:12.5px;color:var(--ink);font-weight:600;padding:6px 9px;border:1px solid var(--line);background:var(--th)}
+td{padding:5px 9px;border:1px solid var(--line2)}
+tr:last-child td{border-bottom:1px solid var(--line2)}
+.card>table,.card>.scroll>table,.scroll.card>table,.card .scroll>table,.pane table{border-style:hidden}
+tr.click:hover td{background:var(--panel)}tr.sel td,tr.sel:hover td{background:var(--sel)}
+.chip{background:none!important;padding:0;font-weight:500;border-radius:0}
+.km{border-radius:3px;padding:1px 7px;font-weight:500;font-size:12.5px}
+.ai{border-radius:3px;padding:1px 6px;background:var(--pur-soft);color:var(--pur)}
+.lg{border-radius:3px;width:28px;height:28px;font-size:10.5px}.who{min-width:0}
+.kb{gap:10px}.col{border-radius:3px;padding:8px}.kc{border-radius:3px;padding:9px 10px;margin-bottom:8px;box-shadow:none}
+.modal>.box{border-radius:4px}.mh{padding:12px 16px}.mb{padding:12px 16px}.mf{padding:10px 16px}.x{border-radius:3px;width:28px;height:28px}
+.toast{border-radius:3px;background:#263241}
+.drop,.st,.paper,.rv-doc{border-radius:3px}
+.pop{border-radius:4px}
+/* danh sách chứng từ: lưới + dòng tổng + ngăn chi tiết */
+.tbar{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:6px 8px;background:var(--card);border:1px solid var(--line);border-bottom:0}
+.tbar .vr{width:1px;height:20px;background:var(--line);margin:0 2px}
+.gridw{overflow:auto;max-height:max(260px,calc(100vh - 430px));border:1px solid var(--line);background:var(--card)}
+.g{border-style:hidden;white-space:nowrap}
+.g th{position:sticky;top:0;z-index:1}
+.g tfoot td{position:sticky;bottom:0;background:var(--th);font-weight:700;border-top:1px solid var(--line)}
+table{font-size:inherit}
+.g td{line-height:1.35}.g td,.g th{padding:5px 7px}.g td.dg{min-width:150px;max-width:230px;overflow:hidden;text-overflow:ellipsis}
+body:has(.drawer.full) .aifab{bottom:70px}
+.g tr.click td{cursor:default}
+.g .st-cxl{color:var(--err);font-weight:600}.g .st-cd{color:var(--brand);font-weight:600}.g .st-dd{color:var(--ok)}.g .st-dx{color:var(--mute)}
+.dpn{margin-top:8px;border:1px solid var(--line);background:var(--card)}
+.dpn .dph{display:flex;gap:10px;align-items:center;padding:5px 10px;background:var(--th);border-bottom:1px solid var(--line);font-weight:600}
+.dpn .gridw{border:0;max-height:220px}
+/* form chứng từ */
+.drawer.full{background:var(--bg);display:flex;flex-direction:column;overflow:hidden;padding-bottom:0}
+.drawer.full .fh{position:static;background:var(--card);backdrop-filter:none;padding:8px 16px;gap:10px}
+.fh .back{border-radius:3px;padding:4px 10px}
+.fh .ttl{font:600 16px var(--font)}.fh .ttl small{font-weight:400;color:var(--mute);font-size:13px;margin-left:6px}
+.fbody{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:12px;padding:12px 16px;align-items:start}
+.fbody.nodoc{grid-template-columns:minmax(0,1fr)}.fbody.nodoc .fdoc{display:none}
+.fmain{display:flex;flex-direction:column;gap:10px;min-width:0}
+.fsec{background:var(--card);border:1px solid var(--line);border-radius:3px}
+.fhd{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:4px 28px;padding:10px 14px}
+.ff{display:grid;grid-template-columns:118px minmax(0,1fr) 44px;gap:8px;align-items:center;padding:3px 0}
+.ff>span:first-child{color:var(--mute)}
+.ff input,.ff select{width:100%;border:1px solid var(--line);border-radius:3px;padding:4px 8px;background:var(--card);min-width:0}
+.ff input:disabled{background:var(--panel);color:var(--ink);border-color:var(--line2)}
+.ff input:focus,.ff select:focus{outline:none;border-color:var(--brand)}
+.ff .cf{font-size:11px;font-weight:600;color:var(--pur);text-align:left}
+.ff.ai-f input{background:color-mix(in srgb,var(--pur-soft) 60%,var(--card))}
+.ftabs{display:flex;gap:0;border-bottom:1px solid var(--line);background:var(--th);padding:0 6px;flex-wrap:wrap}
+.ftabs button{border:0;background:none;padding:7px 14px;color:var(--mute);border-bottom:2px solid transparent;margin-bottom:-1px;font-weight:500}
+.ftabs button.on{color:var(--brand);border-bottom-color:var(--brand);background:var(--card)}
+.ftabs .sp{flex:1}
+.fgrid td input.inp{width:100%;border-color:transparent;background:transparent;padding:3px 6px}
+.fgrid td input.inp:hover{border-color:var(--line)}.fgrid td input.inp:focus{border-color:var(--brand);background:var(--card)}
+.fgrid td{vertical-align:top}.fgrid .acc{font-weight:600;font-variant-numeric:tabular-nums}
+.fsum{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;padding:10px 14px;align-items:start}
+.fsum .row{display:flex;justify-content:space-between;gap:12px;padding:2px 0}.fsum .row b{font-variant-numeric:tabular-nums}
+.fsum .row.t{border-top:1px solid var(--line);margin-top:4px;padding-top:6px;font-size:14px}
+.fdoc{display:flex;flex-direction:column;gap:10px;position:sticky;top:0}
+.fdoc .rv-doc{padding:10px;background:var(--card);border:1px solid var(--line)}
+.ffoot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px max(16px,env(safe-area-inset-right,0px)) max(8px,env(safe-area-inset-bottom,0px)) 16px;background:var(--card);border-top:1px solid var(--line)}
+.ffoot .tag kbd{margin:0 2px}
+.fpanel{padding:10px 14px}
+@media (max-width:1100px){.fbody{grid-template-columns:1fr}.fdoc{position:static}.fhd{grid-template-columns:1fr}.fsum{grid-template-columns:1fr}}
+@media (max-width:860px){.tb .logo{width:auto}.tb .logo .t,.tbi,.tb .user span:last-child{display:none}.side{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}.main{padding:12px 16px 40px}}
 </style>
 
+<header class="tb">
+  <div class="logo"><b>KT</b><div class="t">Kế toán</div></div>
+  <label class="gs"><input id="gsearch" placeholder="Tìm chức năng, số chứng từ, đối tượng (Alt+X)" aria-label="Tìm nhanh" autocomplete="off"></label>
+  <span class="sp"></span>
+  <button class="tbi" data-act="ngayht" title="Ngày hạch toán">Ngày hạch toán: <b>23/11/2026</b></button>
+  <button class="tbi" data-act="keys" title="Phím tắt (F1)">Phím tắt <kbd>F1</kbd></button>
+  <div class="user"><span class="av" id="uav">H</span><span id="uname">Kế toán Hạnh</span></div>
+</header>
 <div class="app">
   <aside class="side">
-    <div class="logo"><b>KT</b><div><div class="t">Kế toán</div></div></div>
     <nav class="nav" id="nav"></nav>
-    <div class="user"><span class="av" id="uav">H</span><span id="uname">Kế toán Hạnh</span></div>
   </aside>
   <main class="main" id="main"></main>
 </div>
@@ -405,7 +522,7 @@ const monthOf = (d) => +String(d).split("/")[1];
 const L = (desc, amt, km, conf, dept = "") => ({ id: ++seq, desc, amt, km, conf, dept, sugg: [km] });
 const inv = (o) => ({ id: ++seq, history: [], flagged: false, ...o });
 const S = {
-  view: "tong-quan", invView: "kb", per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
+  view: "tong-quan", invView: "list", icur: null, ftab: "ht", showDoc: true, per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
   recent: ["6427", "6277"], memory: {}, ledgerTo: "31/10/2026", lastSync: "06:00 hôm nay", lots: 1,
   invoices: [
     inv({ dir: "Mua vào", partner: "Điện lực Vĩnh Long", mst: "0301234567", no: "1C26TAB-00001245", date: "12/11", portal: "khop", step: "choduyet", source: "Cổng thuế", conf: 94, tax: 1845000,
@@ -710,17 +827,36 @@ function invFiltered() {
   const inRep = (i) => S.kmf === "all" || (["1331", "33311"].includes(S.kmf) ? i.tax && taxKey(i) === S.kmf : i.lines.some((l) => l.km === S.kmf));
   return S.invoices.filter((i) => inPer(i.date, S.per) && inRep(i) && (S.dir === "all" || i.dir === S.dir) && (!q || `${i.partner} ${i.no} ${i.mst}`.toLowerCase().includes(q)));
 }
+const DOCTYPE = (i) => (i.dir === "Bán ra" ? "Chứng từ bán hàng" : i.dir === "Chứng từ" ? "Chứng từ chi phí" : "Chứng từ mua hàng");
+const STCLS = { canxuly: "st-cxl", choduyet: "st-cd", daduyet: "st-dd", daxuat: "st-dx" };
+const dgOf = (i) => (i.lines[0]?.desc || "") + (i.lines.length > 1 ? ` (+${i.lines.length - 1} dòng)` : "");
+const canApprove = (i) => ["choduyet", "canxuly"].includes(i.step) && !PROBLEM.includes(i.portal) && i.portal !== "cho";
+// Dòng hạch toán của một chứng từ: [diễn giải, TK Nợ, TK Có, số tiền, khoản mục, bộ phận]
+function postRows(i) {
+  const sale = i.dir === "Bán ra", ctr = counterAcc(i);
+  const rows = i.lines.map((l) => { const a = kmOf(l.km).acc; return [l.desc, sale ? ctr : a, sale ? a : ctr, l.amt, kmOf(l.km).name, l.dept || ""]; });
+  if (i.tax) rows.push([sale ? "Thuế GTGT đầu ra" : "Thuế GTGT được khấu trừ", sale ? ctr : "1331", sale ? "33311" : ctr, i.tax, "", ""]);
+  return rows;
+}
+function invRows() { const list = invFiltered(); return list.filter((i) => S.tab === "all" || i.step === S.tab); }
+function detailPane(i) {
+  if (!i) return `<div class="dph">Chi tiết</div><div class="tag" style="padding:10px">Chọn một chứng từ để xem hạch toán.</div>`;
+  const r = postRows(i);
+  return `<div class="dph">Hạch toán · ${esc(DOCTYPE(i))} ${esc(i.no)}<span class="sp"></span><span class="tag" style="font-weight:400">Enter / double-click để mở chứng từ</span></div>
+  <div class="gridw"><table class="g"><thead><tr><th style="width:34px">#</th><th>Diễn giải</th><th>TK Nợ</th><th>TK Có</th><th class="n">Số tiền</th><th>Khoản mục chi phí</th><th>Bộ phận</th></tr></thead>
+  <tbody>${r.map(([d, n, c, a, k, b], x) => `<tr><td class="tag">${x + 1}</td><td class="dg">${esc(d)}</td><td><b>${n}</b></td><td><b>${c}</b></td><td class="n">${vnd(a)}</td><td>${esc(k)}</td><td>${esc(b)}</td></tr>`).join("")}</tbody>
+  <tfoot><tr><td></td><td>Cộng</td><td></td><td></td><td class="n">${vnd(r.reduce((s, x) => s + x[3], 0))}</td><td></td><td></td></tr></tfoot></table></div>`;
+}
 function vInv() {
   const list = invFiltered();
   const cnt = (k) => list.filter((i) => i.step === k).length;
   const tabs = [["all", "Tất cả", list.length], ["canxuly", "Cần xử lý", cnt("canxuly")], ["choduyet", "Chờ duyệt", cnt("choduyet")], ["daduyet", "Đã duyệt", cnt("daduyet")], ["daxuat", "Đã xuất file", cnt("daxuat")]];
-  const head = `<div class="top"><div><h1>Hóa đơn, chứng từ</h1><div class="sub">${perLabel(S.per)} · ${list.filter((i) => i.dir !== "Chứng từ").length} hóa đơn · ${list.filter((i) => i.dir === "Chứng từ").length} chứng từ khác</div></div>
-    <span class="chip ok" style="padding:6px 10px">Đã đồng bộ với cổng thuế · lần cuối ${S.lastSync}</span>
-    <button class="btn" data-act="sync" id="syncbtn">${ic("sync")}Đồng bộ chứng từ</button><button class="btn" data-act="newupload">${ic("up")}Tải hóa đơn lên</button><button class="btn p" data-act="newdoc">${ic("doc")}Lập chứng từ</button></div>
-  <div class="bar"><div class="seg"><button class="${S.invView === "list" ? "on" : ""}" data-act="invview" data-v="list">Danh sách</button><button class="${S.invView === "kb" ? "on" : ""}" data-act="invview" data-v="kb">Kanban</button></div>
-    ${perSel("per")}<select class="inp" id="f-kmf" aria-label="Báo cáo / khoản mục"><option value="all">Mọi báo cáo / khoản mục</option>${KM.map((k) => `<option value="${k.code}" ${S.kmf === k.code ? "selected" : ""}>Báo cáo: ${esc(k.name)} (${k.acc})</option>`).join("")}<option value="1331" ${S.kmf === "1331" ? "selected" : ""}>Báo cáo: Thuế GTGT được khấu trừ (1331)</option><option value="33311" ${S.kmf === "33311" ? "selected" : ""}>Báo cáo: Thuế GTGT đầu ra (33311)</option></select><select class="inp" id="f-dir" aria-label="Chiều"><option value="all">Mua vào + Bán ra + Chứng từ</option>${["Mua vào", "Bán ra", "Chứng từ"].map((d) => `<option ${S.dir === d ? "selected" : ""}>${d}</option>`).join("")}</select>
-    <input class="inp" id="f-q" placeholder="Tìm MST, số hóa đơn, đối tác" value="${esc(S.q)}" style="flex:1;min-width:180px"></div>
-  ${S.kmf !== "all" ? `<div class="note" style="margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Đang xem hóa đơn thuộc báo cáo <b>${esc(repName(S.kmf))}</b> · ${perLabel(S.per)}<span class="sp"></span><button class="btn s" data-act="gorep" data-k="${S.kmf}">Mở báo cáo này</button><button class="btn s" data-act="kmfclear">Bỏ lọc</button></div>` : ""}`;
+  const head = `<div class="top"><div><h1>Hóa đơn, chứng từ</h1><div class="sub">${perLabel(S.per)} · ${list.filter((i) => i.dir !== "Chứng từ").length} hóa đơn · ${list.filter((i) => i.dir === "Chứng từ").length} chứng từ khác · đồng bộ cổng thuế lần cuối ${S.lastSync}</div></div>
+    <div class="seg"><button class="${S.invView === "list" ? "on" : ""}" data-act="invview" data-v="list">Danh sách</button><button class="${S.invView === "kb" ? "on" : ""}" data-act="invview" data-v="kb">Theo bước</button></div></div>
+  <div class="bar">${perSel("per")}<select class="inp" id="f-dir" aria-label="Loại chứng từ"><option value="all">Mọi loại chứng từ</option>${["Mua vào", "Bán ra", "Chứng từ"].map((d) => `<option value="${d}" ${S.dir === d ? "selected" : ""}>${d === "Chứng từ" ? "Chứng từ chi phí" : d}</option>`).join("")}</select>
+    <select class="inp" id="f-kmf" aria-label="Khoản mục"><option value="all">Mọi khoản mục</option>${KM.map((k) => `<option value="${k.code}" ${S.kmf === k.code ? "selected" : ""}>${esc(k.name)} (${k.acc})</option>`).join("")}<option value="1331" ${S.kmf === "1331" ? "selected" : ""}>Thuế GTGT được khấu trừ (1331)</option><option value="33311" ${S.kmf === "33311" ? "selected" : ""}>Thuế GTGT đầu ra (33311)</option></select>
+    <input class="inp" id="f-q" placeholder="Tìm số chứng từ, đối tượng, MST" value="${esc(S.q)}" style="flex:1;min-width:180px"></div>
+  ${S.kmf !== "all" ? `<div class="note" style="margin-bottom:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Đang lọc theo khoản mục <b>${esc(repName(S.kmf))}</b><span class="sp"></span><button class="btn s" data-act="gorep" data-k="${S.kmf}">Mở báo cáo</button><button class="btn s" data-act="kmfclear">Bỏ lọc</button></div>` : ""}`;
   if (S.invView === "kb") {
     const cols = ["canxuly", "choduyet", "daduyet", "daxuat"];
     return head + `<div class="tag" style="margin-bottom:8px">Kéo thẻ từ “Chờ duyệt” sang “Đã duyệt” để duyệt; kéo về “Cần xử lý” để để xử lý sau.</div><div class="kb">${cols.map((k) => {
@@ -730,15 +866,36 @@ function vInv() {
       ${(() => { const c = checks(i); return `<div class="mini" title="${c.done}/${c.total} bước"><div style="width:${(c.done / c.total) * 100}%;background:${ckColor(c)}"></div></div>`; })()}<div class="m"><b>${vnd(total(i))}</b>${k === "canxuly" ? chip(...PORTAL[i.portal]) : k === "daxuat" ? chip("gray", i.lot || "Đã xuất") : `<span class="ai">AI ${i.conf}%</span>`}</div></div>`).join("") || `<div class="tag" style="padding:8px">Trống</div>`}</div>`;
     }).join("")}</div>`;
   }
-  const rows = list.filter((i) => S.tab === "all" || i.step === S.tab);
+  const rows = invRows();
+  if (!rows.some((r) => r.id === S.icur)) S.icur = rows[0]?.id ?? null;
+  const cur = rows.find((r) => r.id === S.icur);
   const selN = [...S.sel].filter((id) => rows.some((r) => r.id === id)).length;
-  return head + `<div class="bar"><div class="seg">${tabs.map(([k, t, n]) => `<button class="${S.tab === k ? "on" : ""}" data-act="tab" data-tab="${k}">${t} ${n}</button>`).join("")}</div><span class="sp"></span>
-    <span class="tag">${selN ? `Đã chọn ${selN}` : "Chọn hóa đơn “Khớp” để duyệt hàng loạt"}</span><button class="btn g" data-act="bulk" ${selN ? "" : "disabled"}>${ic("check")}Duyệt ${selN || ""} hóa đơn</button></div>
-  <div class="card scroll"><table><tr><th></th><th>Đối tác</th><th>Ký hiệu – Số</th><th>Ngày</th><th class="n">Tổng tiền</th><th>Cổng thuế</th><th>Khoản mục</th><th>Nguồn</th><th>Bước</th></tr>
-  ${rows.map((i) => `<tr class="click ${S.sel.has(i.id) ? "sel" : ""}" data-act="openinv" data-id="${i.id}"><td>${canBulk(i) ? `<input type="checkbox" class="cb" data-act="pick" data-id="${i.id}" ${S.sel.has(i.id) ? "checked" : ""} aria-label="Chọn">` : ""}</td>
-  <td>${who(i.partner, i.dir)}</td><td>${esc(i.no)}</td><td>${i.date}</td><td class="n" style="font-weight:600">${vnd(total(i))}</td><td>${chip(...PORTAL[i.portal])}</td>
-  <td>${[...new Set(i.lines.map((l) => l.km))].map(kmChip).join(" ")}</td><td class="tag">${i.source.startsWith("AI") ? `<span class="ai">${esc(i.source)}</span>` : esc(i.source)}</td><td>${chip(STEPS[i.step][1], STEPS[i.step][0])}</td></tr>`).join("") || `<tr><td colspan="9" class="tag" style="padding:20px">Không có hóa đơn nào ở bước này.</td></tr>`}
-  </table></div>`;
+  const tot = (f) => vnd(rows.reduce((s, i) => s + f(i), 0));
+  return head + `<div class="tbar">
+    <button class="btn p" data-act="newdoc" title="Thêm chứng từ (F4)">${ic("doc")}Thêm <kbd>F4</kbd></button>
+    <button class="btn" data-act="newupload">${ic("up")}Tải hóa đơn lên</button>
+    <button class="btn" data-act="opencur" ${cur ? "" : "disabled"} title="Mở chứng từ đang chọn (Enter)">Xem / Sửa <kbd>Enter</kbd></button>
+    <span class="vr"></span>
+    <button class="btn g" data-act="tapprove" title="Duyệt chứng từ đã tích, hoặc dòng đang chọn (Ctrl+G)">${ic("check")}Duyệt${selN ? " " + selN : ""} <kbd>Ctrl+G</kbd></button>
+    <button class="btn" data-act="tunapprove" ${cur?.step === "daduyet" ? "" : "disabled"}>Bỏ duyệt</button>
+    <span class="vr"></span>
+    <button class="btn" data-act="sync" id="syncbtn">${ic("sync")}Đồng bộ cổng thuế</button>
+    <button class="btn" data-act="invxls">${ic("out")}Xuất Excel</button>
+    <span class="sp"></span><div class="seg">${tabs.map(([k, t, n]) => `<button class="${S.tab === k ? "on" : ""}" data-act="tab" data-tab="${k}">${t} (${n})</button>`).join("")}</div></div>
+  <div class="gridw"><table class="g" id="invgrid"><thead><tr><th style="width:30px"></th><th>Ngày hạch toán</th><th>Ngày chứng từ</th><th>Số chứng từ</th><th>Loại</th><th>Đối tượng</th><th>Diễn giải</th><th class="n">Tiền hàng</th><th class="n">Thuế GTGT</th><th class="n">Tổng tiền</th><th>Cổng thuế</th><th>Trạng thái</th></tr></thead>
+  <tbody>${rows.map((i) => `<tr class="click ${i.id === S.icur ? "sel" : ""}" data-act="icur" data-id="${i.id}"><td>${canBulk(i) ? `<input type="checkbox" class="cb" data-act="pick" data-id="${i.id}" ${S.sel.has(i.id) ? "checked" : ""} aria-label="Chọn">` : ""}</td>
+    <td>${i.date}/2026</td><td>${i.date}/2026</td><td>${esc(i.no)}</td><td>${i.dir === "Bán ra" ? "Bán hàng" : i.dir === "Chứng từ" ? "Chi phí" : "Mua hàng"}</td><td>${esc(i.partner)}</td><td class="dg" title="${esc(dgOf(i))}">${esc(dgOf(i))}</td>
+    <td class="n">${vnd(sub(i))}</td><td class="n">${vnd(i.tax)}</td><td class="n" style="font-weight:600">${vnd(total(i))}</td><td>${chip(...PORTAL[i.portal])}</td><td class="${STCLS[i.step]}">${STEPS[i.step][0]}${i.source.startsWith("AI") ? ` <span class="ai">AI</span>` : ""}</td></tr>`).join("") || `<tr><td colspan="12" class="tag" style="padding:16px">Không có chứng từ nào.</td></tr>`}</tbody>
+  <tfoot><tr><td></td><td colspan="6">Tổng cộng · ${rows.length} chứng từ</td><td class="n">${tot(sub)}</td><td class="n">${tot((i) => i.tax)}</td><td class="n">${tot(total)}</td><td></td><td></td></tr></tfoot></table></div>
+  <div class="dpn" id="idetail">${detailPane(cur)}</div>`;
+}
+// Chọn dòng không vẽ lại cả trang — để double-click vẫn rơi đúng dòng
+function setCur(id, scroll) {
+  S.icur = id;
+  document.querySelectorAll("#invgrid tr.sel").forEach((r) => r.classList.remove("sel"));
+  const tr = document.querySelector(`#invgrid tr[data-id="${id}"]`); if (tr) { tr.classList.add("sel"); if (scroll) tr.scrollIntoView({ block: "nearest" }); }
+  const d = $("#idetail"); if (d) d.innerHTML = detailPane(S.invoices.find((x) => x.id === id));
+  const ub = document.querySelector('[data-act="tunapprove"]'); if (ub) ub.disabled = S.invoices.find((x) => x.id === id)?.step !== "daduyet";
 }
 
 /* ---- Ngăn chi tiết + sửa khoản mục ---- */
@@ -751,10 +908,7 @@ function journalHTML(i) {
     ${i.dir === "Bán ra" && ent.length ? `<div class="tag" style="padding:0 22px 16px">Giá vốn tạm tính theo giá bình quân tồn kho đến ngày chứng từ.</div>` : ""}`;
 }
 function sumHTML(i) {
-  return `<div class="field"><span>Tiền hàng</span><input value="${vnd(sub(i))}" disabled><span class="cf"></span></div>
-    <div class="field"><span>Thuế GTGT</span><input data-invf="tax" value="${vnd(i.tax)}" ${i.step === "daxuat" || i.rate != null ? "disabled" : ""}><span class="cf"></span></div>
-    <div class="field"><span>Tổng thanh toán</span><input value="${vnd(total(i))}" disabled><span class="cf"></span></div>
-    <div class="field"><span>Bằng chữ</span><span class="inwords">${total(i) ? docSo(total(i)) : "—"}</span><span></span></div>`;
+  return `<div class="row"><span>Tiền hàng</span><b>${vnd(sub(i))}</b></div><div class="row"><span>Thuế GTGT</span><b>${vnd(i.tax)}</b></div><div class="row t"><span>Tổng thanh toán</span><b>${vnd(total(i))}</b></div>`;
 }
 function renderDrawer() {
   const i = curDoc(); if (!i) return;
@@ -764,61 +918,72 @@ function renderDrawer() {
   const warnP = !isNew && PROBLEM.includes(i.portal) && i.portal !== "lech" ? `<div class="note y">Trạng thái cổng thuế: <b>${PORTAL[i.portal][1]}</b>. Cần xử lý trước khi duyệt${i.portal === "chuafile" ? " — bổ sung file XML/PDF từ nhà cung cấp" : ""}.</div>` : "";
   const [series, num] = i.no.includes("-") ? i.no.split("-") : ["", i.no];
   const ai = isNew ? !!i.fileName : i.source.startsWith("AI");
-  const conf = (v) => `<span class="cf cf-ok">${isNew ? (ai ? "AI điền" : "") : ai ? v : "Cổng"}</span>`;
-  const fld = (label, k, v, c, ph = "") => `<div class="field"><span>${label}</span><input data-invf="${k}" value="${esc(v)}" placeholder="${ph}" ${locked || !k ? "disabled" : ""}>${c || '<span class="cf"></span>'}</div>`;
+  const fld = (label, k, v, ph = "", byAI = ai) => `<div class="ff ${byAI && v ? "ai-f" : ""}"><span>${label}</span><input data-invf="${k}" value="${esc(v)}" placeholder="${ph}" ${locked || !k ? "disabled" : ""}><span class="cf">${byAI && v ? "AI" : ""}</span></div>`;
   const op = i.op ? opOf(i.op) : null, ctr = counterAcc(i), c = checks(i);
-  const head = isNew
-    ? `<div style="flex:1;min-width:240px"><div style="font:700 18px var(--display)">Lập chứng từ</div><div class="tag">Chọn nghiệp vụ, phần mềm tự định khoản theo chế độ kế toán.</div></div>
-       <button class="btn" data-act="upload">${ic("up")}Tải hóa đơn lên</button><button class="btn" data-act="dsave" data-mode="draft">Lưu nháp</button><button class="btn g" data-act="dsave" data-mode="approve">${ic("check")}Lưu & duyệt</button>`
-    : `<div style="flex:1;min-width:260px">${who(i.partner, `${i.dir} · ${i.no} · ${i.date}/2026`)}</div>
-       <div style="display:flex;gap:6px;flex-wrap:wrap">${chip(...PORTAL[i.portal])}${chip(STEPS[i.step][1], STEPS[i.step][0])}<span class="ai">AI tin cậy ${i.conf}%</span></div>
-       <div style="display:flex;gap:8px;flex-wrap:wrap">${locked ? chip("gray", "Đã xuất file · " + (i.lot || "")) : `
-         ${i.step === "daduyet" ? `<button class="btn" data-act="unapprove">Bỏ duyệt</button>` : `<button class="btn g" data-act="approve" ${PROBLEM.includes(i.portal) ? "disabled title='Xử lý trạng thái cổng thuế trước'" : ""}>${ic("check")}Duyệt</button>`}
-         ${i.step !== "canxuly" ? `<button class="btn" data-act="later">Để xử lý sau</button>` : ""}
-         ${i.portal === "chuafile" ? `<button class="btn" data-act="attach">${ic("up")}Bổ sung file</button>` : ""}
-         ${i.portal === "lech" || i.portal === "dieuchinh" ? `<button class="btn" data-act="resolve">Đã xử lý xong</button>` : ""}
-         ${i.flagged ? `<button class="btn" data-act="unflag">Bỏ “để xử lý sau”</button>` : ""}`}</div>`;
+  const title = isNew ? (op ? op[2] : "Chứng từ mới") : DOCTYPE(i);
+  const showDoc = S.showDoc !== false;
+  const tabsDef = [["ht", "1. Hạch toán"], ["thue", "2. Thuế"], ["bt", "3. Bút toán"], ["kt", `Kiểm tra (${c.done}/${c.total})`], ["ls", "Lịch sử"]];
+  const ftab = tabsDef.some((t) => t[0] === S.ftab) ? S.ftab : "ht";
+  const rate = i.rate != null ? i.rate : sub(i) ? Math.round((i.tax / sub(i)) * 100) : 0;
   const docBox = i.fileName || !isNew ? paperHTML(i)
-    : `<div class="rv-doc" style="display:grid;place-items:center;min-height:300px;text-align:center"><div><div style="font-weight:600;margin-bottom:6px">Chưa có chứng từ gốc</div><div class="tag" style="margin-bottom:12px">Tải hóa đơn lên để AI đọc và điền, hoặc nhập tay bên cạnh.</div><button class="btn p" data-act="upload">${ic("up")}Tải hóa đơn lên</button></div></div>`;
-  $("#layer").innerHTML = `<aside class="drawer full" role="dialog" aria-label="${isNew ? "Lập chứng từ" : "Chi tiết chứng từ"}">
-  <div class="fh"><button class="back" data-act="close">← Hóa đơn, chứng từ</button>${head}</div>
-  <div class="dgrid"><div class="dmain">
-    ${i.fresh ? `<div class="note" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">${chip("ok", "AI đọc xong")} Đã điền thông tin và ${i.lines.length} dòng từ <b>${esc(i.fileName || "")}</b>. Kiểm tra các ô “AI điền”, chỉnh khoản mục hoặc tách dòng nếu cần rồi ${isNew ? "lưu" : "duyệt"}.</div>` : ""}
+    : `<div class="rv-doc" style="display:grid;place-items:center;min-height:260px;text-align:center"><div><div style="font-weight:600;margin-bottom:6px">Chưa có chứng từ gốc</div><div class="tag" style="margin-bottom:12px">Tải hóa đơn lên để AI đọc và điền, hoặc nhập tay.</div><button class="btn p" data-act="upload">${ic("up")}Tải hóa đơn lên</button></div></div>`;
+  const ctxBtns = isNew ? `<button class="btn" data-act="upload">${ic("up")}Tải hóa đơn lên</button>` : locked ? chip("gray", "Đã xuất file · " + (i.lot || "")) : `
+    ${i.step !== "canxuly" ? `<button class="btn" data-act="later">Để xử lý sau</button>` : ""}
+    ${i.portal === "chuafile" ? `<button class="btn" data-act="attach">${ic("up")}Bổ sung file</button>` : ""}
+    ${i.portal === "lech" || i.portal === "dieuchinh" ? `<button class="btn" data-act="resolve">Đã xử lý xong</button>` : ""}
+    ${i.flagged ? `<button class="btn" data-act="unflag">Bỏ “để xử lý sau”</button>` : ""}`;
+  const foot = isNew
+    ? `<button class="btn" data-act="close">Hủy <kbd>Esc</kbd></button><button class="btn" data-act="dsave" data-mode="draft" title="Lưu chứng từ, ở lại màn hình">Cất <kbd>Ctrl+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="new">Cất và thêm <kbd>Ctrl+Shift+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="close">Cất và đóng <kbd>Ctrl+Q</kbd></button><button class="btn g" data-act="dsave" data-mode="approve">${ic("check")}Cất và duyệt <kbd>Ctrl+G</kbd></button>`
+    : `<button class="btn" data-act="close">Đóng <kbd>Esc</kbd></button>${locked ? "" : i.step === "daduyet" ? `<button class="btn" data-act="unapprove">Bỏ duyệt</button>` : `<button class="btn g" data-act="approve" ${PROBLEM.includes(i.portal) ? "disabled title='Xử lý trạng thái cổng thuế trước'" : ""}>${ic("check")}Duyệt <kbd>Ctrl+G</kbd></button>`}`;
+  const lineRows = i.lines.map((l, n) => { const a = kmOf(l.km).acc; return `<tr><td class="tag">${n + 1}</td>
+      <td>${isNew ? `<input class="inp" data-ln="desc" data-id="${l.id}" value="${esc(l.desc)}" placeholder="Hàng hóa, dịch vụ">` : esc(l.desc)}</td>
+      ${isNew ? `<td><input class="inp n" data-ln="qty" data-id="${l.id}" value="${l.qty ?? 1}" inputmode="decimal"></td><td><input class="inp n" data-ln="price" data-id="${l.id}" value="${l.price ? vnd(l.price) : ""}" inputmode="numeric"></td>` : ""}
+      <td class="acc">${sale ? ctr : a}</td><td class="acc">${sale ? a : ctr}</td>
+      <td class="n" style="font-weight:600" id="lna-${l.id}">${vnd(l.amt)}</td>
+      <td>${locked ? esc(kmOf(l.km).name) : `<button class="km" data-act="kmpick" data-line="${l.id}">${esc(kmOf(l.km).name)} ▾</button>`}${l.conf < 100 ? ` <span class="ai">AI ${l.conf}%</span>` : ""}</td>
+      <td>${esc(l.dept || "")}</td>
+      <td style="white-space:nowrap">${locked ? "" : `<button class="btn s" data-act="split" data-line="${l.id}">Tách</button>`}${isNew && i.lines.length > 1 ? ` <button class="btn s" data-act="delline" data-line="${l.id}" aria-label="Xóa dòng" title="Xóa dòng (Ctrl+Delete)">×</button>` : ""}</td></tr>`; }).join("");
+  const panels = {
+    ht: `<div class="scroll"><table class="g fgrid"><thead><tr><th style="width:30px">#</th><th style="min-width:${isNew ? 220 : 200}px">Diễn giải</th>${isNew ? `<th class="n" style="width:90px">Số lượng</th><th class="n" style="width:120px">Đơn giá</th>` : ""}<th style="width:64px">TK Nợ</th><th style="width:64px">TK Có</th><th class="n" style="width:130px">Số tiền</th><th style="min-width:190px">Khoản mục chi phí</th><th>Bộ phận</th><th style="width:80px"></th></tr></thead>
+      <tbody>${lineRows}</tbody><tfoot><tr><td></td><td>Cộng tiền hàng</td>${isNew ? "<td></td><td></td>" : ""}<td></td><td></td><td class="n">${vnd(sub(i))}</td><td colspan="3">${isNew ? `<button class="btn s" data-act="addline" title="Thêm dòng (Ctrl+Insert)">+ Thêm dòng</button>` : ""}</td></tr></tfoot></table></div>
+      <div id="splitbox"></div>`,
+    thue: `<div class="scroll"><table class="g"><thead><tr><th>Diễn giải thuế</th><th style="width:80px">% thuế GTGT</th><th class="n" style="width:130px">Tiền thuế</th><th>TK thuế</th><th>TK đối ứng</th><th>Ký hiệu HĐ</th><th>Số HĐ</th><th>Ngày HĐ</th><th>MST</th></tr></thead>
+      <tbody><tr><td>${sale ? "Thuế GTGT đầu ra" : "Thuế GTGT được khấu trừ"}${i.partner ? " – " + esc(i.partner) : ""}</td>
+      <td>${isNew ? `<select class="inp" data-invf="rate">${[0, 5, 8, 10].map((v) => `<option value="${v}" ${+i.rate === v ? "selected" : ""}>${v}%</option>`).join("")}</select>` : rate + "%"}</td>
+      <td class="n">${isNew || locked || i.rate != null ? vnd(i.tax) : `<input class="inp n" data-invf="tax" value="${vnd(i.tax)}" style="width:120px">`}</td>
+      <td class="acc">${sale ? "33311" : "1331"}</td><td class="acc">${ctr}</td><td>${esc(series || "—")}</td><td>${esc(num)}</td><td>${i.date}/2026</td><td>${esc(i.mst || "")}</td></tr></tbody></table></div>`,
+    bt: `<div class="jr" id="jr-box">${journalHTML(i)}</div>`,
+    kt: `<div class="fpanel"><div class="prog" style="height:6px"><div style="width:${(c.done / c.total) * 100}%;background:${ckColor(c)}"></div></div>
+      <div class="ck">${c.list.map((x) => `<div class="ck-${x.st}"><i>${x.st === "ok" ? "✓" : x.st === "miss" ? "!" : x.st === "na" ? "–" : ""}</i><span>${esc(x.label)}${x.hint ? `<small>${esc(x.hint)}</small>` : ""}</span></div>`).join("")}</div></div>`,
+    ls: `<div class="fpanel" style="display:flex;flex-direction:column;gap:8px">${isNew && !i.history.length ? `<div class="tag">Chứng từ chưa lưu.</div>` : i.history.slice().reverse().map(([t, h]) => `<div><span class="tag">${esc(t)}</span> · ${esc(h)}</div>`).join("")}</div>`,
+  };
+  $("#layer").innerHTML = `<aside class="drawer full" role="dialog" aria-label="${esc(title)}">
+  <div class="fh"><button class="back" data-act="close">← Danh sách</button>
+    <div style="flex:1;min-width:220px"><div class="ttl">${esc(title)}${i.no ? `<small>${esc(i.no)}</small>` : ""}</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">${isNew ? `<span class="tag">Chưa lưu</span>` : `<span class="${STCLS[i.step]}" style="font-weight:600">${STEPS[i.step][0]}</span>${chip(...PORTAL[i.portal])}<span class="ai">AI tin cậy ${i.conf}%</span>`}</div></div>
+    ${ctxBtns}
+    <button class="btn" data-act="togdoc" aria-pressed="${showDoc}">${showDoc ? "Ẩn" : "Hiện"} chứng từ gốc</button></div>
+  <div class="fbody ${showDoc ? "" : "nodoc"}"><div class="fmain">
+    ${i.fresh ? `<div class="note">${chip("ok", "AI đọc xong")} Đã điền thông tin và ${i.lines.length} dòng từ <b>${esc(i.fileName || "")}</b>. Ô tô tím là AI điền — kiểm tra, chỉnh khoản mục hoặc tách dòng rồi ${isNew ? "cất" : "duyệt"}.</div>` : ""}
     ${lech}${warnP}
-    <section class="pane"><div class="ph"><span class="h2">Thông tin chứng từ</span><span class="sp"></span><span class="tag">${locked ? "đã xuất file, chỉ xem" : isNew ? "nhập tay hoặc tải hóa đơn lên để AI điền" : "sửa trực tiếp nếu AI đọc sai"}</span></div>
-      <div class="rv" style="padding:0 22px 22px"><div class="rv-top">${docBox}
-      <div class="rv-info">
-        ${isNew ? `<div class="field"><span>Nghiệp vụ</span><select class="inp" data-invf="op" style="width:100%">${["Mua hàng", "Bán hàng", "Thu – chi"].map((g) => `<optgroup label="${g}">${OPS.filter((o) => o[0] === g).map((o) => `<option value="${o[1]}" ${o[1] === i.op ? "selected" : ""}>${o[2]}</option>`).join("")}</optgroup>`).join("")}</select><span class="cf"></span></div>` : ""}
-        ${fld(isNew ? (sale ? "Khách hàng" : doc ? "Đối tượng" : "Nhà cung cấp") : "Đối tượng", "partner", i.partner, conf("99%"), "Chọn đối tượng")}
-        ${fld("Mã số thuế", "mst", i.mst === "—" ? "" : i.mst, conf("99%"))}
-        ${doc ? fld("Số chứng từ", "num", num, conf("99%"), "Để trống sẽ tự đánh số") : fld("Ký hiệu hoá đơn", "series", series, conf("99%"), "7 ký tự, ví dụ 1C26TAA") + fld("Số hoá đơn", "num", num, conf("99%"))}
-        ${fld(isNew ? "Ngày chứng từ" : "Ngày hoá đơn", "date", i.date + "/2026", conf("98%"))}
-        ${fld("Ngày ghi sổ", "", i.date + "/2026")}
-        ${fld("Diễn giải", "", (op ? op[2] : sale ? "Bán hàng" : doc ? "Chi phí theo bảng kê" : "Mua hàng") + (i.partner ? " – " + i.partner : ""))}
-        <div class="tag" style="margin:8px 0 4px">Tài khoản đối ứng: <b>${ctr} · ${esc(ACC_NAME[ctr] || "")}</b>${i.fileName ? " · nguồn " + esc(i.source) : ""}</div>
-        <div id="sum-box">${sumHTML(i)}</div>
-      </div></div></div></section>
-    <section class="pane"><div class="ph"><span class="h2">${isNew ? "Dòng chứng từ" : "Chi tiết"}</span><span class="sp"></span><span class="tag">mỗi dòng một khoản mục · bấm khoản mục để đổi, “Tách” để chia một dòng</span>${isNew ? `<button class="btn s" data-act="addline">+ Thêm dòng</button>` : ""}</div>
-      <div class="scroll"><table><tr><th style="width:34px">#</th><th style="min-width:${isNew ? 230 : 180}px">Diễn giải</th>${isNew ? `<th class="n" style="width:100px">Số lượng</th><th class="n" style="width:110px">Đơn giá</th>` : ""}<th class="n">Thành tiền</th><th style="min-width:200px">Khoản mục</th><th>Nợ / Có</th><th></th></tr>
-      ${i.lines.map((l, n) => { const a = kmOf(l.km).acc; return `<tr><td class="tag">${n + 1}</td>
-        <td>${isNew ? `<input class="inp" data-ln="desc" data-id="${l.id}" value="${esc(l.desc)}" placeholder="Hàng hóa, dịch vụ" style="width:100%">` : `<span style="font-weight:500">${esc(l.desc)}</span>`}${l.dept ? `<div class="tag">Bộ phận: ${esc(l.dept)}</div>` : ""}</td>
-        ${isNew ? `<td><input class="inp n" data-ln="qty" data-id="${l.id}" value="${l.qty ?? 1}" inputmode="decimal" style="width:100%"></td><td><input class="inp n" data-ln="price" data-id="${l.id}" value="${l.price ? vnd(l.price) : ""}" inputmode="numeric" style="width:100%"></td>` : ""}
-        <td class="n" style="font-weight:600" id="lna-${l.id}">${vnd(l.amt)}</td>
-        <td>${locked ? kmChip(l.km) : `<button class="km" data-act="kmpick" data-line="${l.id}">${esc(kmOf(l.km).name)} <i>${a}</i> ▾</button>`}<div class="tag" style="margin-top:4px">${l.conf < 100 ? `AI ${l.conf}% · ` : ""}báo cáo <button class="lnk" data-act="gorep" data-k="${l.km}">${esc(kmOf(l.km).name)}</button>${isNew ? "" : " · " + (l.exp ? "Đã xuất · " + l.exp : i.step === "daduyet" ? "Chờ xuất" : "Chưa duyệt")}</div></td>
-        <td style="white-space:nowrap"><b>${sale ? ctr : a}</b> / <b>${sale ? a : ctr}</b></td>
-        <td style="white-space:nowrap">${locked ? "" : `<button class="btn s" data-act="split" data-line="${l.id}">Tách</button>`}${isNew && i.lines.length > 1 ? ` <button class="x" data-act="delline" data-line="${l.id}" aria-label="Xóa dòng" style="width:26px;height:26px;font-size:14px;display:inline-grid">×</button>` : ""}</td></tr>`; }).join("")}
-      <tr><td></td><td style="white-space:nowrap">Thuế GTGT${isNew ? ` <select class="inp" data-invf="rate" style="margin-left:8px;padding:4px 8px">${[0, 5, 8, 10].map((v) => `<option value="${v}" ${+i.rate === v ? "selected" : ""}>${v}%</option>`).join("")}</select>` : ""}</td>${isNew ? "<td></td><td></td>" : ""}<td class="n" style="font-weight:600">${vnd(i.tax)}</td><td><span class="km">${sale ? "Thuế GTGT đầu ra" : "Thuế GTGT được khấu trừ"}</span></td><td style="white-space:nowrap"><b>${sale ? ctr : "1331"}</b> / <b>${sale ? "33311" : ctr}</b></td><td></td></tr>
-      <tr><td></td><td><b>Tổng thanh toán</b></td>${isNew ? "<td></td><td></td>" : ""}<td class="n"><b>${vnd(total(i))}</b></td><td colspan="3"></td></tr></table></div>
-      <div id="splitbox"></div>
-      <div class="jr" id="jr-box" style="border-top:1px solid var(--line)">${journalHTML(i)}</div></section>
+    <section class="fsec"><div class="fhd"><div>
+        ${isNew ? `<div class="ff"><span>Nghiệp vụ</span><select data-invf="op">${["Mua hàng", "Bán hàng", "Thu – chi"].map((g) => `<optgroup label="${g}">${OPS.filter((o) => o[0] === g).map((o) => `<option value="${o[1]}" ${o[1] === i.op ? "selected" : ""}>${o[2]}</option>`).join("")}</optgroup>`).join("")}</select><span></span></div>` : ""}
+        ${fld(sale ? "Khách hàng" : doc ? "Đối tượng" : "Nhà cung cấp", "partner", i.partner, "Chọn đối tượng")}
+        ${fld("Mã số thuế", "mst", i.mst === "—" ? "" : i.mst)}
+        ${fld("Diễn giải", "", (op ? op[2] : sale ? "Bán hàng" : doc ? "Chi phí theo bảng kê" : "Mua hàng") + (i.partner ? " – " + i.partner : ""), "", false)}
+        ${fld("TK đối ứng", "", `${ctr} – ${ACC_NAME[ctr] || ""}`, "", false)}
+      </div><div>
+        ${fld("Ngày hạch toán", "", i.date + "/2026", "", false)}
+        ${fld(doc ? "Ngày chứng từ" : "Ngày hóa đơn", "date", i.date + "/2026")}
+        ${doc ? fld("Số chứng từ", "num", num, "Để trống sẽ tự đánh số") : fld("Ký hiệu HĐ", "series", series, "Ví dụ 1C26TAA") + fld("Số hóa đơn", "num", num)}
+      </div></div></section>
+    <section class="fsec"><div class="ftabs" role="tablist">${tabsDef.map(([k, t]) => `<button role="tab" class="${k === ftab ? "on" : ""}" data-act="ftab" data-t="${k}" aria-selected="${k === ftab}">${t}</button>`).join("")}</div>
+      ${tabsDef.map(([k]) => `<div data-fp="${k}" ${k === ftab ? "" : "hidden"}>${panels[k]}</div>`).join("")}
+      <div class="fsum" style="border-top:1px solid var(--line)"><div><span class="tag">Số tiền bằng chữ:</span> <span class="inwords">${total(i) ? docSo(total(i)) : "—"}</span>${i.reason ? `<div class="tag" style="margin-top:6px">AI gợi ý khoản mục vì: ${esc(i.reason)}</div>` : ""}</div><div id="sum-box">${sumHTML(i)}</div></div></section>
   </div>
-  <aside class="dside">
-    <section class="pane"><div class="ph"><span class="h2">Mức độ hoàn thiện</span><span class="sp"></span><span class="tag">${c.done}/${c.total}${c.missing ? " · thiếu " + c.missing : c.done === c.total ? " · đủ" : ""}</span></div>
-      <div class="pb"><div class="prog" style="height:8px"><div style="width:${(c.done / c.total) * 100}%;background:${ckColor(c)}"></div></div>
-      <div class="ck">${c.list.map((x) => `<div class="ck-${x.st}"><i>${x.st === "ok" ? "✓" : x.st === "miss" ? "!" : x.st === "na" ? "–" : ""}</i><span>${esc(x.label)}${x.hint ? `<small>${esc(x.hint)}</small>` : ""}</span></div>`).join("")}</div></div></section>
-    ${i.reason ? `<section class="pane"><div class="ph"><span class="h2">Vì sao AI gợi ý</span></div><div class="pb">${esc(i.reason)}</div></section>` : ""}
-    <section class="pane"><div class="ph"><span class="h2">Lịch sử</span></div><div class="pb" style="display:flex;flex-direction:column;gap:10px">${isNew && !i.history.length ? `<div class="tag">Chứng từ chưa lưu.</div>` : i.history.slice().reverse().map(([t, h]) => `<div><div class="tag">${esc(t)}</div><div>${esc(h)}</div></div>`).join("")}</div></section>
-  </aside></div></aside>`;
+  <aside class="fdoc">${docBox}</aside></div>
+  <div class="ffoot"><span class="tag">Enter: sang ô kế · <kbd>Ctrl+Insert</kbd> thêm dòng · <kbd>F1</kbd> phím tắt</span><span class="sp"></span>${foot}</div>
+  </aside>`;
 }
 const nav = (h) => (location.hash === "#" + h ? render() : (location.hash = h));
 const now = () => new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
@@ -913,7 +1078,7 @@ function applyRead(key, name) {
   d.rate = src.tax ? Math.round((src.tax / d.lines.reduce((a, l) => a + l.qty * l.price, 0)) * 100) : 0;
   $("#layer2").innerHTML = ""; renderDrawer(); toast("AI đọc xong · đã điền chứng từ, kiểm tra rồi lưu");
 }
-function saveDraft(mode) {
+function saveDraft(mode, after) {
   const d = S.draftDoc; recalc(d);
   if (!d.partner.trim()) return toast("Nhập đối tượng trước");
   if (!sub(d)) return toast("Nhập số tiền cho ít nhất một dòng");
@@ -924,7 +1089,10 @@ function saveDraft(mode) {
   d.history.push([now(), `Kế toán Hạnh lập chứng từ “${opOf(d.op)[2]}”${d.fileName ? " từ file " + d.fileName + " (AI điền)" : " (nhập tay)"}${mode === "draft" ? ", lưu nháp" : ""}`]);
   if (mode === "draft") d.flagged = true;
   if (mode === "approve") { d.step = "daduyet"; d.fresh = false; d.history.push([now(), "Kế toán Hạnh duyệt"]); }
-  S.invoices.unshift(d); S.draftDoc = null; S.open = d.id; S.tab = "all"; S.kmf = "all"; S.q = "";
+  S.invoices.unshift(d); S.draftDoc = null; S.open = d.id; S.tab = "all"; S.kmf = "all"; S.q = ""; S.icur = d.id;
+  if (after) { S.open = null; closeLayer(); if (location.hash !== "#hoa-don") location.hash = "hoa-don"; else render();
+    if (after === "new") setTimeout(() => newDraft(false), 90);
+    return toast(`Đã cất ${d.no}${mode === "approve" ? " và duyệt" : ""}`); }
   if (location.hash !== "#hoa-don") { location.hash = "hoa-don"; setTimeout(() => { S.open = d.id; renderDrawer(); }, 80); } else render();
   toast(mode === "draft" ? "Đã lưu nháp" : "Đã lưu và duyệt chứng từ");
 }
@@ -1418,6 +1586,15 @@ document.addEventListener("click", (e) => {
     invview: () => { S.invView = t.dataset.v; render(); },
     tab: () => { S.tab = t.dataset.tab; render(); },
     openinv: () => { S.open = +t.dataset.id; renderDrawer(); },
+    icur: () => setCur(+t.dataset.id),
+    opencur: () => openCur(),
+    tapprove: () => approveCur(),
+    tunapprove: () => { const i = S.invoices.find((x) => x.id === S.icur); if (i?.step !== "daduyet") return; i.step = "choduyet"; i.history.push([now(), "Kế toán Hạnh bỏ duyệt"]); render(); toast("Đã bỏ duyệt " + i.no); },
+    invxls: () => { const r = invRows(); filePreview(`Danh sách chứng từ · ${perLabel(S.per)}`, ["Ngày hạch toán", "Ngày chứng từ", "Số chứng từ", "Loại chứng từ", "Đối tượng", "MST", "Diễn giải", "Tiền hàng", "Thuế GTGT", "Tổng tiền", "Trạng thái"], r.map((i) => [i.date + "/2026", i.date + "/2026", i.no, DOCTYPE(i), i.partner, i.mst, dgOf(i), sub(i), i.tax, total(i), STEPS[i.step][0]])); },
+    ftab: () => { S.ftab = t.dataset.t; document.querySelectorAll("[data-fp]").forEach((p) => (p.hidden = p.dataset.fp !== S.ftab)); document.querySelectorAll(".ftabs button").forEach((b) => { b.classList.toggle("on", b.dataset.t === S.ftab); b.setAttribute("aria-selected", b.dataset.t === S.ftab); }); },
+    togdoc: () => { S.showDoc = S.showDoc === false; renderDrawer(); },
+    keys: () => keysHelp(),
+    ngayht: () => toast("Ngày hạch toán dùng làm ngày mặc định khi lập chứng từ mới"),
     bulk: () => { let n = 0; S.invoices.forEach((i) => { if (S.sel.has(i.id) && canBulk(i)) { i.step = "daduyet"; i.history.push([now(), "Kế toán Hạnh duyệt (hàng loạt)"]); n++; } }); S.sel.clear(); S.exSel = null; render(); toast(`Đã duyệt ${n} hóa đơn`); },
     sync: () => { t.disabled = true; t.innerHTML = ic("sync") + "Đang đồng bộ…"; setTimeout(() => {
         const add = [inv({ dir: "Mua vào", partner: "Viễn thông CN", mst: "0105556667", no: "1C26TCN-00004418", date: "17/11", portal: "khop", source: "Cổng thuế", conf: 97, tax: 198000, reason: "Gói cước như các tháng trước.", lines: [L("Cước điện thoại cố định T11", 1980000, "6427b", 97, "Văn phòng")] }),
@@ -1434,7 +1611,7 @@ document.addEventListener("click", (e) => {
     fpick: () => { pickMode = "invoice"; $("#filepick").accept = ".xml,.pdf,.jpg,.jpeg,.png,.heic,.webp"; $("#filepick").click(); },
     addline: () => { ci.lines.push(blankLine()); renderDrawer(); },
     delline: () => { ci.lines = ci.lines.filter((l) => l.id !== +t.dataset.line); renderDrawer(); },
-    dsave: () => saveDraft(t.dataset.mode),
+    dsave: () => saveDraft(t.dataset.mode, t.dataset.after),
     opendup: () => { const d = S.invoices.find((i) => i.no === t.dataset.no); closeLayer(); S.tab = "all"; nav("hoa-don"); setTimeout(() => { S.open = d.id; renderDrawer(); }, 60); },
     kmpick: () => kmPop(t, ci.lines.find((l) => l.id === +t.dataset.line), ci),
     split: () => splitForm(ci, ci.lines.find((l) => l.id === +t.dataset.line)),
@@ -1547,8 +1724,59 @@ document.addEventListener("change", (e) => {
     else if (pickMode === "ledger") { S.ledgerTo = "15/11/2026"; render(); toast(`Đã cập nhật sổ cái từ ${f.name}`); }
   }
 });
+/* ---- Phím tắt kiểu MISA / Fast (docs/nguyen-tac-ui-ke-toan.md, mục E) ---- */
+function openCur() { if (S.icur != null) { S.open = S.icur; renderDrawer(); } }
+function approveCur() {
+  const ids = S.sel.size ? [...S.sel] : [S.icur];
+  const ok = S.invoices.filter((i) => ids.includes(i.id) && canApprove(i));
+  if (!ok.length) return toast(S.sel.size ? "Không có chứng từ nào duyệt được" : "Chứng từ này chưa duyệt được — mở ra xem cần xử lý gì");
+  ok.forEach((i) => { i.step = "daduyet"; i.flagged = false; i.history.push([now(), "Kế toán Hạnh duyệt" + (ok.length > 1 ? " (hàng loạt)" : "")]); });
+  S.sel.clear(); S.exSel = null; render(); toast(`Đã duyệt ${ok.length} chứng từ`);
+}
+const KEYS = [["Danh sách chứng từ", [["F4", "Thêm chứng từ"], ["↑ ↓", "Chọn dòng trên / dưới"], ["Enter, F3", "Mở chứng từ đang chọn"], ["Ctrl+G", "Duyệt chứng từ đã tích hoặc đang chọn"]]],
+  ["Form chứng từ", [["Ctrl+S", "Cất"], ["Ctrl+Shift+S", "Cất và thêm"], ["Ctrl+Q", "Cất và đóng"], ["Ctrl+G", "Duyệt / Cất và duyệt"], ["Enter", "Sang ô kế; ô cuối thì thêm dòng"], ["Ctrl+Insert", "Thêm dòng"], ["Ctrl+Delete", "Xóa dòng đang đứng"], ["Esc", "Đóng"]]],
+  ["Chung", [["Alt+X", "Tìm nhanh"], ["F1", "Bảng phím tắt"]]]];
+function keysHelp() {
+  modal(`<div class="mh"><div style="flex:1"><h3>Phím tắt</h3><div class="tag">Theo thói quen MISA (Ctrl+S, Ctrl+Q…) và Fast (F4, F3).</div></div><button class="x" data-act="close" aria-label="Đóng">×</button></div>
+  <div class="mb">${KEYS.map(([g, ks]) => `<div style="font-weight:600;margin:6px 0 4px">${g}</div><table class="g"><tbody>${ks.map(([k, d]) => `<tr><td style="width:150px">${k.split(", ").map((x) => `<kbd>${x}</kbd>`).join(" ")}</td><td>${d}</td></tr>`).join("")}</tbody></table>`).join("")}</div>`);
+}
+const typing = (el) => el?.matches?.("input,textarea,select,[contenteditable]");
+document.addEventListener("dblclick", (e) => { const tr = e.target.closest?.('#invgrid tr[data-act="icur"]'); if (tr && !e.target.closest("input")) { S.icur = +tr.dataset.id; openCur(); } });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") { document.querySelector(".pop")?.remove() || closeLayer(); }
+  const k = e.key, ctrl = e.ctrlKey || e.metaKey, form = !!document.querySelector(".drawer.full"), modalOpen = !!document.querySelector(".modal");
+  if (k === "F1") { e.preventDefault(); return keysHelp(); }
+  if (e.altKey && (k === "x" || k === "X")) { e.preventDefault(); return $("#gsearch")?.focus(); }
+  if (form && !modalOpen) {
+    const d = curDoc(); const isNew = d && d === S.draftDoc;
+    const sv = (mode, after) => { e.preventDefault(); document.activeElement?.blur?.(); setTimeout(() => (isNew ? saveDraft(mode, after) : toast("Đã cất — thay đổi được lưu ngay khi sửa")), 0); };
+    if (ctrl && e.shiftKey && (k === "S" || k === "s")) return sv("draft", "new");
+    if (ctrl && (k === "s" || k === "S")) return sv("draft");
+    if (ctrl && (k === "q" || k === "Q")) return isNew ? sv("draft", "close") : (e.preventDefault(), closeLayer());
+    if (ctrl && (k === "g" || k === "G")) { e.preventDefault(); return $('.ffoot [data-act="approve"]:not(:disabled), .ffoot [data-mode="approve"]')?.click(); }
+    if (ctrl && k === "Insert" && isNew) { e.preventDefault(); d.lines.push(blankLine()); renderDrawer(); return setTimeout(() => document.querySelector(`[data-ln="desc"][data-id="${d.lines.at(-1).id}"]`)?.focus(), 0); }
+    if (ctrl && k === "Delete" && isNew && e.target.dataset?.ln && d.lines.length > 1) { e.preventDefault(); d.lines = d.lines.filter((l) => l.id !== +e.target.dataset.id); return renderDrawer(); }
+    if (k === "Enter" && e.target.dataset?.ln) { // nhập lưới như Excel: Enter sang ô kế, ô cuối thì thêm dòng
+      e.preventDefault(); const all = [...document.querySelectorAll("input[data-ln]")]; const nx = all[all.indexOf(e.target) + 1];
+      const want = nx ? `[data-ln="${nx.dataset.ln}"][data-id="${nx.dataset.id}"]` : null;
+      e.target.blur(); if (!want) { d.lines.push(blankLine()); renderDrawer(); }
+      return setTimeout(() => { const el = document.querySelector(want || `[data-ln="desc"][data-id="${d.lines.at(-1).id}"]`); el?.focus(); el?.select?.(); }, 0);
+    }
+  }
+  if (!form && !modalOpen && S.view === "hoa-don" && S.invView === "list" && !typing(e.target)) {
+    const ids = [...document.querySelectorAll("#invgrid tbody tr[data-id]")].map((r) => +r.dataset.id), at = ids.indexOf(S.icur);
+    if (k === "ArrowDown" || k === "ArrowUp") { e.preventDefault(); const n = ids[Math.max(0, Math.min(ids.length - 1, at + (k === "ArrowDown" ? 1 : -1)))]; if (n != null) setCur(n, true); return; }
+    if (k === "Enter" || k === "F3") { e.preventDefault(); return openCur(); }
+    if (ctrl && (k === "g" || k === "G")) { e.preventDefault(); return approveCur(); }
+  }
+  if (k === "F4" && !form) { e.preventDefault(); return newDraft(false); }
+  if (e.target.id === "gsearch" && k === "Enter") {
+    const q = e.target.value.trim(), ql = q.toLowerCase(); if (!q) return;
+    const hit = NAV.find(([h, t]) => h !== "grp" && t.toLowerCase().includes(ql));
+    e.target.value = ""; e.target.blur();
+    if (hit) return nav(hit[0]);
+    S.q = q; S.tab = "all"; S.invView = "list"; S.kmf = "all"; S.dir = "all"; S.per = { m: "year", v: 0 }; nav("hoa-don");
+  }
+  if (k === "Escape") { document.querySelector(".pop")?.remove() || closeLayer(); }
   if (e.key === "Enter" && e.target.matches?.(".kpi.go")) e.target.click();
   if (e.key === "Enter" && e.target.matches?.(".kc")) { S.open = +e.target.dataset.id; renderDrawer(); }
 });
