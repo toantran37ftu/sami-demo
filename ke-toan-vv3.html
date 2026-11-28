@@ -310,6 +310,7 @@ kbd{font:600 11px var(--font);border:1px solid var(--line);border-bottom-width:2
 .tb{position:sticky;top:0;z-index:15;height:46px;display:flex;align-items:center;gap:12px;padding:0 max(14px,env(safe-area-inset-right,0px)) 0 max(14px,env(safe-area-inset-left,0px));background:var(--card);border-bottom:1px solid var(--line)}
 .tb .logo{padding:0;gap:8px;width:190px}.tb .logo b{width:28px;height:28px;border-radius:4px;background:var(--brand);box-shadow:none;font-size:11px}.tb .logo .t{font:600 15px var(--font)}
 .gs{flex:0 1 420px;min-width:0}.gs input{width:100%;border:1px solid var(--line);border-radius:3px;padding:5px 10px;background:var(--panel)}.gs input:focus{outline:none;border-color:var(--brand);background:var(--card)}
+.unit{border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--ink);padding:4px 6px;font:600 12.5px var(--font);max-width:240px}
 .tbi{border:0;background:none;color:var(--mute);padding:5px 8px;border-radius:3px;white-space:nowrap}.tbi:hover{background:var(--panel);color:var(--ink)}.tbi b{color:var(--ink)}
 .tb .user{margin:0;padding:0 0 0 6px;background:none;box-shadow:none;border-radius:0;white-space:nowrap}
 .av{background:var(--brand);border-radius:50%}
@@ -466,9 +467,10 @@ body:has(.drawer.full) .aifab{bottom:70px}
 
 <header class="tb">
   <div class="logo"><b>KT</b><div class="t">Kế toán</div></div>
+  <select class="unit" id="unitsel" aria-label="Đơn vị đang làm sổ" title="Đơn vị đang làm sổ"><option value="ct">Công ty TNHH TM Việt Vương 3</option><option value="cd">Công đoàn cơ sở Việt Vương 3</option></select>
   <label class="gs"><input id="gsearch" placeholder="Tìm chức năng, số chứng từ, đối tượng (Alt+X)" aria-label="Tìm nhanh" autocomplete="off"></label>
   <span class="sp"></span>
-  <button class="tbi" data-act="ngayht" title="Ngày hạch toán">Ngày hạch toán: <b>23/11/2026</b></button>
+  <button class="tbi" data-act="ngayht" title="Ngày hạch toán">Ngày hạch toán: <b id="today"></b></button>
   <button class="tbi" data-act="keys" title="Phím tắt (F1)">Phím tắt <kbd>F1</kbd></button>
   <div class="user"><span class="av" id="uav">H</span><span id="uname">Kế toán Hạnh</span></div>
 </header>
@@ -572,10 +574,13 @@ const STEPS = { canxuly: ["Cần xử lý", "err"], choduyet: ["Chờ duyệt", 
 
 let seq = 100;
 const monthOf = (d) => +String(d).split("/")[1];
+// shortcut: ngày hạch toán = ngày máy; dữ liệu mẫu vẫn là năm 2026 — lấy từ server khi có backend
+const NOW = new Date(), TD = `${String(NOW.getDate()).padStart(2, "0")}/${String(NOW.getMonth() + 1).padStart(2, "0")}`, TDY = `${TD}/${NOW.getFullYear()}`;
+document.getElementById("today").textContent = TDY;
 const L = (desc, amt, km, conf, dept = "") => ({ id: ++seq, desc, amt, km, conf, dept, sugg: [km] });
 const inv = (o) => ({ id: ++seq, history: [], flagged: false, ...o });
 const S = {
-  view: "tong-quan", invView: "list", icur: null, ftab: "ht", showDoc: true, per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
+  view: "tong-quan", unit: "ct", invView: "list", icur: null, ftab: "ht", showDoc: true, per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
   recent: ["6427", "6277"], memory: {}, ledgerTo: "31/10/2026", lastSync: "06:00 hôm nay", lots: 1,
   invoices: [
     inv({ dir: "Mua vào", partner: "Điện lực Vĩnh Long", mst: "0301234567", no: "1C26TAB-00001245", date: "12/11", portal: "khop", step: "choduyet", source: "Cổng thuế", conf: 94, tax: 1845000,
@@ -808,16 +813,24 @@ function renderNav() {
   if (agent) { $("#nav").innerHTML = modes + `<div class="agl">${listHTML()}</div>`; return; }
   renderNav0(modes);
 }
+// Mỗi đơn vị một sổ: Kế toán + Danh mục là của công ty, Thu chi là quỹ công đoàn
+const GRP_UNIT = { "Kế toán": "ct", "Cài đặt": "ct", "Thu chi": "cd" }, UNITS = { ct: "Công ty TNHH TM Việt Vương 3", cd: "Công đoàn cơ sở Việt Vương 3" };
+function unitOf(v) { let g = null, u = null; NAV.forEach(([k, t]) => { if (k === "grp") g = t; else if (k === v) u = GRP_UNIT[g] || null; }); return u; }
 function renderNav0(modes) {
   const choDuyet = S.invoices.filter((i) => i.step === "choduyet").length;
   const lech = S.batches.filter((b) => b.status === "dagui").length;
-  $("#nav").innerHTML = modes + NAV.map(([k, t, i]) => k === "grp" ? `<div class="grp">${t}</div>`
+  let g = null;
+  $("#nav").innerHTML = modes + NAV.filter(([k, t]) => { if (k === "grp") g = t; const u = GRP_UNIT[g]; return !u || u === S.unit; }).map(([k, t, i]) => k === "grp" ? `<div class="grp">${t}</div>`
     : `<a href="#${k}" class="${S.view === k ? "on" : ""}">${ic(i)}${t}${k === "hoa-don" && choDuyet ? `<span class="badge">${choDuyet}</span>` : ""}${k === "sao-ke" && lech ? `<span class="badge">${lech}</span>` : ""}</a>`).join("");
 }
+document.addEventListener("change", (e) => { if (e.target.id === "unitsel") { S.unit = e.target.value; nav(S.unit === "ct" ? "tong-quan" : "tong-quan-thu-chi"); } });
 function go() {
   const h = location.hash.slice(1);
   S.view = h === "ai" || NAV.some(([k]) => k === h) ? h : "tong-quan";
   if (S.view !== "ai") S.lastBrowse = S.view;
+  const u = unitOf(S.view);
+  if (u && u !== S.unit) { S.unit = u; toast("Đã chuyển sang " + UNITS[u]); }
+  $("#unitsel").value = S.unit;
   closeLayer(); render();
 }
 window.addEventListener("hashchange", go);
@@ -875,11 +888,19 @@ function vDash() {
 
 /* ================== 1.2 Hóa đơn, chứng từ ================== */
 const repName = (k) => (k === "1331" ? "Thuế GTGT được khấu trừ" : k === "33311" ? "Thuế GTGT đầu ra" : kmOf(k).name);
+// Bỏ dấu để gõ "dien luc" vẫn ra "Điện lực"
+const fold = (x) => String(x).normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/gi, "d").toLowerCase();
+function hitQ(i, q) {
+  if (!q) return true;
+  if (fold(`${i.partner} ${i.no} ${i.mst} ${i.lines.map((l) => l.desc).join(" ")}`).includes(fold(q))) return true;
+  const d = q.replace(/[.,\s]/g, ""); // số tiền: gõ 1.845.000 hay 1845000 đều được
+  return /^\d{4,}$/.test(d) && [total(i), sub(i), i.tax, ...i.lines.map((l) => l.amt)].some((a) => String(a).includes(d));
+}
 function invFiltered() {
-  const q = S.q.trim().toLowerCase();
+  const q = S.q.trim();
   const taxKey = (i) => (i.dir === "Bán ra" ? "33311" : "1331");
   const inRep = (i) => S.kmf === "all" || (["1331", "33311"].includes(S.kmf) ? i.tax && taxKey(i) === S.kmf : i.lines.some((l) => l.km === S.kmf));
-  return S.invoices.filter((i) => inPer(i.date, S.per) && inRep(i) && (S.dir === "all" || i.dir === S.dir) && (!q || `${i.partner} ${i.no} ${i.mst}`.toLowerCase().includes(q)));
+  return S.invoices.filter((i) => inPer(i.date, S.per) && inRep(i) && (S.dir === "all" || i.dir === S.dir) && hitQ(i, q));
 }
 const DOCTYPE = (i) => (i.dir === "Bán ra" ? "Chứng từ bán hàng" : i.dir === "Chứng từ" ? "Chứng từ chi phí" : "Chứng từ mua hàng");
 const PORTAL_SHORT = { khop: "Khớp", chuafile: "Chưa có file", lech: "Lệch tiền", khongtim: "Không thấy", thaythe: "Bị thay thế", dieuchinh: "Bị điều chỉnh", huy: "Bị hủy", ctkhac: "CT khác", cho: "Chờ đối chiếu" };
@@ -926,6 +947,8 @@ function vInv() {
   const cur = rows.find((r) => r.id === S.icur);
   const selN = [...S.sel].filter((id) => rows.some((r) => r.id === id)).length;
   const tot = (f) => vnd(rows.reduce((s, i) => s + f(i), 0));
+  const q = S.q.trim(), yearN = q ? S.invoices.filter((i) => hitQ(i, q)).length : 0;
+  const qNote = q ? `<div class="note" style="margin-bottom:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">Tìm “<b>${esc(q)}</b>”: ${rows.length} chứng từ ${S.tab === "all" ? "ở mọi trạng thái" : "ở tab " + STEPS[S.tab][0]} trong ${perLabel(S.per).toLowerCase()}<span class="sp"></span>${S.tab !== "all" ? `<button class="btn s" data-act="tab" data-tab="all">Tìm mọi trạng thái</button>` : ""}${yearN > list.length && S.per.m !== "year" ? `<button class="btn s" data-act="qyear">Tìm cả năm (${yearN})</button>` : ""}<button class="btn s" data-act="qclear">Xóa tìm</button></div>` : "";
   return head + `<div class="tbar">
     <div class="stabs" role="tablist">${tabs.map(([k, t, n]) => `<button role="tab" class="${S.tab === k ? "on" : ""}" data-act="tab" data-tab="${k}">${t} <span>${n}</span></button>`).join("")}</div>
     <span class="sp"></span>
@@ -933,7 +956,7 @@ function vInv() {
     <button class="ibtn" data-act="sync" id="syncbtn" title="Đồng bộ cổng thuế">${ic("sync")}</button>
     <button class="ibtn" data-act="invxls" title="Xuất Excel">${ic("out")}</button>
     <span class="split"><button class="btn p" data-act="newdoc" title="Thêm chứng từ (F4)">Thêm <kbd>F4</kbd></button><button class="btn p" data-act="addmenu" aria-label="Chọn cách thêm">▾</button></span></div>
-  <div class="gridw"><table class="g" id="invgrid"><thead><tr><th style="width:30px"><input type="checkbox" class="cb" data-act="pickall" aria-label="Chọn tất cả chứng từ duyệt được" ${rows.some(canBulk) && rows.filter(canBulk).every((i) => S.sel.has(i.id)) ? "checked" : ""}></th><th>Trạng thái</th><th>Cổng thuế</th><th>Ngày hạch toán</th><th>Số chứng từ</th><th>Đối tượng</th><th>Diễn giải</th><th class="n">Tiền hàng</th><th class="n">Thuế GTGT</th><th class="n">Tổng tiền</th><th class="ra" aria-label="Chức năng"></th></tr></thead>
+  ${qNote}<div class="gridw"><table class="g" id="invgrid"><thead><tr><th style="width:30px"><input type="checkbox" class="cb" data-act="pickall" aria-label="Chọn tất cả chứng từ duyệt được" ${rows.some(canBulk) && rows.filter(canBulk).every((i) => S.sel.has(i.id)) ? "checked" : ""}></th><th>Trạng thái</th><th>Cổng thuế</th><th>Ngày hạch toán</th><th>Số chứng từ</th><th>Đối tượng</th><th>Diễn giải</th><th class="n">Tiền hàng</th><th class="n">Thuế GTGT</th><th class="n">Tổng tiền</th><th class="ra" aria-label="Chức năng"></th></tr></thead>
   <tbody>${rows.map((i) => `<tr class="click ${i.id === S.icur ? "sel" : ""}" data-act="openrow" data-id="${i.id}"><td>${canBulk(i) ? `<input type="checkbox" class="cb" data-act="pick" data-id="${i.id}" ${S.sel.has(i.id) ? "checked" : ""} aria-label="Chọn">` : ""}</td>
     <td class="${STCLS[i.step]}">${STEPS[i.step][0]}${i.source.startsWith("AI") ? ` <span class="ai">AI</span>` : ""}</td><td title="${PORTAL[i.portal][1]}">${chip(PORTAL[i.portal][0], PORTAL_SHORT[i.portal])}</td><td>${i.date}/2026</td><td>${esc(i.no)}</td><td>${esc(i.partner)}</td><td class="dg" title="${esc(dgOf(i))}">${esc(dgOf(i))}</td>
     <td class="n">${vnd(sub(i))}</td><td class="n">${vnd(i.tax)}</td><td class="n" style="font-weight:600">${vnd(total(i))}</td>
@@ -1110,8 +1133,8 @@ const QTY = { "Nút nhựa 4 lỗ 15mm": [1200, 52000], "Chỉ may polyester 40/
 const blankLine = (km = "") => ({ ...L("", 0, km, 100), qty: 1, price: 0 });
 function newDraft(withUpload) {
   const op = OPS[0];
-  S.draftDoc = inv({ dir: op[3], op: op[1], ctr: op[4], partner: "", mst: "", no: "", date: "23/11", portal: "cho", portalAfter: "khop", source: "Lập tay", conf: 100, tax: 0, rate: 10, reason: "", step: "choduyet", lines: [blankLine("1522")] });
-  S.open = "draft"; renderDrawer(); if (withUpload) uploadModal();
+  S.draftDoc = inv({ dir: op[3], op: op[1], ctr: op[4], partner: "", mst: "", no: "", date: TD, portal: "cho", portalAfter: "khop", source: "Lập tay", conf: 100, tax: 0, rate: 10, reason: "", step: "choduyet", lines: [blankLine("1522")] });
+  S.open = "draft"; renderDrawer(); if (withUpload) uploadModal(); else document.querySelector('#layer [data-invf="partner"]')?.focus();
 }
 function uploadModal() {
   modal2(`<div class="mh"><div style="flex:1"><h3>Tải hóa đơn lên</h3><div class="tag">Mỗi lần một hóa đơn · AI đọc rồi điền vào chứng từ đang lập</div></div><button class="x" data-act="close2" aria-label="Đóng">×</button></div>
@@ -1209,17 +1232,18 @@ function vReport() {
       ${x.rows.map((y) => `<tr><td>${y.i.date}</td><td><button class="lnk" data-act="gotoinv" data-id="${y.i.id}">${esc(y.i.no)}</button></td><td>${esc(y.i.partner)}</td><td>${esc(y.desc)}</td><td>${y.debit} / ${y.credit}</td><td class="n">${vnd(y.amt)}</td><td>${y.exp ? chip("gray", "Đã xuất · " + y.exp) : chip("info", "Chờ xuất")}</td></tr>`).join("")}</table></div>
       <div style="margin-top:8px"><button class="btn s" data-act="invbyrep" data-k="${x.key}">Xem các hóa đơn này trong danh sách Hóa đơn, chứng từ</button></div></td></tr>` : ""}`).join("") || `<tr><td colspan="8" class="tag" style="padding:20px">Chưa có hóa đơn đã duyệt trong ${perLabel(S.per).toLowerCase()}.</td></tr>`}
   </table></div>
-  <div class="bar" style="margin-top:14px"><span class="tag">Chỉ xuất dòng chưa xuất. Hóa đơn có mọi dòng đã xuất chuyển sang “Đã xuất file”.</span><span class="sp"></span><button class="btn p" data-act="rexport" ${chosen.length ? "" : "disabled"}>${ic("out")}Xuất ${chosen.length} báo cáo</button></div>
+  <div class="bar" style="margin-top:14px"><span class="tag">Chỉ xuất dòng chưa xuất. Hóa đơn có mọi dòng đã xuất chuyển sang “Đã xuất file”.</span><span class="sp"></span><button class="btn p" data-act="rexport" ${chosen.length ? "" : "disabled"}>${ic("out")}Xuất ${chosen.length} báo cáo${chosen.length ? ` · ${new Set(chosen.flatMap((x) => x.rows.filter((y) => !y.exp).map((y) => y.i.id))).size} chứng từ` : ""}</button></div>
   <div class="card" style="margin-top:14px"><div class="hd"><h3>Lịch sử xuất file</h3></div><div class="scroll"><table><tr><th>Thời điểm</th><th>Người xuất</th><th>Nội dung</th><th class="n">Số dòng</th></tr>${S.exportsLog.slice().reverse().map((e) => `<tr><td>${e.at}</td><td>${e.by}</td><td>${esc(e.what)}</td><td class="n">${e.n}</td></tr>`).join("")}</table></div></div>`;
 }
 function doExport(keys) {
   const reps = reports().filter((x) => keys.includes(x.key) && x.pending);
   const lot = `Lô 11-${String.fromCharCode(65 + S.lots++)}`; const rows = [];
   for (const rp of reps) for (const y of rp.rows.filter((z) => !z.exp)) { rows.push([rp.name, y.i.date + "/2026", y.i.no, y.i.partner, y.desc, y.debit, y.credit, y.amt]); if (y.tax) y.i.taxExp = lot; else y.l.exp = lot; }
-  S.invoices.forEach((i) => { if (i.step === "daduyet" && i.lines.every((l) => l.exp) && (!i.tax || i.taxExp)) { i.step = "daxuat"; i.lot = lot; i.history.push([now(), `Xuất file · ${lot}`]); } });
+  let moved = 0;
+  S.invoices.forEach((i) => { if (i.step === "daduyet" && i.lines.every((l) => l.exp) && (!i.tax || i.taxExp)) { i.step = "daxuat"; i.lot = lot; moved++; i.history.push([now(), `Xuất file · ${lot}`]); } });
   S.exportsLog.push({ at: now() + " hôm nay", by: "Kế toán Hạnh", what: `${reps.length} báo cáo (${reps.map((x) => x.name).join(", ")}) · ${lot}`, n: rows.length });
   S.rsel = null; render();
-  filePreview(`Đã xuất ${reps.length} báo cáo · ${lot}`, REP_HEAD, rows, S.fmt === "pm" ? "Theo mẫu nhập phần mềm kế toán đang dùng. Xem trước nội dung file Excel, mỗi báo cáo một sheet." : "Excel tổng hợp, mỗi khoản mục một sheet.");
+  filePreview(`Đã xuất ${reps.length} báo cáo · ${moved} chứng từ chuyển sang “Đã xuất file” · ${lot}`, REP_HEAD, rows, S.fmt === "pm" ? "Theo mẫu nhập phần mềm kế toán đang dùng. Xem trước nội dung file Excel, mỗi báo cáo một sheet." : "Excel tổng hợp, mỗi khoản mục một sheet.");
 }
 
 /* ================== Danh mục (theo trang /catalog của mini-app) ================== */
@@ -1335,18 +1359,20 @@ function vStmt() {
     <div class="drop" style="padding:36px"><div style="font-weight:600;font-size:15px">Chưa có sao kê tháng 06/2026</div><div class="tag" style="margin:6px 0 12px">Excel hoặc PDF lịch sử giao dịch VietinBank eFAST.</div><button class="btn p" data-act="loadstmt">${ic("up")}Tải sao kê</button></div>`;
   const cur = pend.find((b) => b.id === S.stmtTab) || pend.find((b) => b.status === "dagui") || pend[0];
   const showOther = S.stmtTab === "other";
-  const tabs = pend.map((b) => `<button class="${!showOther && b.id === cur.id ? "on" : ""}" data-act="stmttab" data-id="${b.id}">${esc(b.name)} ${b.status === "dachot" ? "✓" : `· ${unresolved(b)} chưa khớp`}</button>`).join("") + `<button class="${showOther ? "on" : ""}" data-act="stmttab" data-id="other">Giao dịch khác · ${others.length}</button>`;
+  const tabs = pend.map((b) => `<button class="${!showOther && b.id === cur.id ? "on" : ""}" data-act="stmttab" data-id="${b.id}">${esc(b.name)} ${b.status === "dachot" ? "✓" : `· ${unresolved(b)} chưa khớp`}</button>`).join("") + `<button class="${showOther ? "on" : ""}" data-act="stmttab" data-id="other">Giao dịch ngoài đợt chi · ${others.length}</button>`;
   const head = `<div class="top"><div><h1>Sao kê & đối chiếu</h1><div class="sub">Sao kê VietinBank TK 1290 0007 2468 · ${show.map((m) => "tháng " + String(m).padStart(2, "0")).join(", ")}/2026 · ${chip("ok", "Số dư đầu/cuối kỳ khớp")}</div></div>${perSel("tcPer")}<button class="btn" data-act="loadstmt">${ic("up")}Tải sao kê khác</button></div>${juneNote}<div class="bar"><div class="seg">${tabs}</div></div>`;
   if (showOther) return head + `<div class="card scroll"><table><tr><th>Ngày</th><th>Nội dung</th><th class="n">Thu</th><th class="n">Chi</th><th>Loại (gợi ý)</th></tr>${others.map((o) => `<tr><td>${o.date}</td><td>${esc(o.desc)}</td><td class="n">${o.in ? vnd(o.in) : ""}</td><td class="n">${o.out ? vnd(o.out) : ""}</td><td>${chip("info", o.type)}</td></tr>`).join("")}</table></div>`;
   const rows = stmtRows(cur); const left = unresolved(cur);
   const fileT = rows.reduce((a, r) => a + (r.amt || 0), 0), bankT = rows.reduce((a, r) => a + (r.bank || 0), 0);
   const ok = rows.filter((r) => r.res[0] === "ok").length;
+  // Tổng có thể bằng nhau khi các dòng lệch bù trừ — nên đếm lệch trên từng dòng
+  const bad = rows.filter((r) => (r.bank || 0) !== (r.amt || 0)), badAmt = bad.reduce((a, r) => a + Math.abs((r.bank || 0) - (r.amt || 0)), 0);
   return head + `<div class="grid2" style="grid-template-columns:minmax(0,2.3fr) minmax(240px,1fr)"><div class="card scroll"><table><tr><th>Người nhận</th><th class="n">File chi</th><th class="n">Sao kê</th><th>Ngày GD</th><th>Kết quả</th><th>Ghi chú</th></tr>
   ${rows.map((r, n) => `<tr class="${r.res[0] === "ok" || r.note ? "" : r.res[0] === "err" ? "bad" : "wrn"}"><td><div style="font-weight:500">${esc(r.name)}</div><div class="tag">${esc((r.acct || "").slice(0, 4))}…${esc((r.acct || "").slice(-4))}</div></td><td class="n">${r.amt == null ? "—" : vnd(r.amt)}</td><td class="n" style="font-weight:600">${r.bank == null ? "—" : vnd(r.bank)}</td><td class="tag">${r.at}</td><td>${chip(...r.res)}</td>
   <td>${r.res[0] === "ok" ? "" : r.note ? `<span class="tag">${esc(r.note)}</span>` : cur.status === "dachot" ? "" : `<div style="display:flex;gap:6px"><input class="inp" style="width:150px" id="nt-${n}" placeholder="Ghi chú xử lý"><button class="btn s" data-act="note" data-n="${n}" data-b="${cur.id}">Lưu</button></div>`}</td></tr>`).join("")}</table></div>
   <div class="card" style="padding:16px"><div class="tag">Tiến độ đối chiếu</div><div style="font-size:26px;font-weight:700">${rows.length - left} <span class="tag" style="font-size:14px">/ ${rows.length} dòng đã khớp hoặc có ghi chú</span></div>
   <div class="prog" style="height:8px;margin:6px 0 12px"><div style="width:${((rows.length - left) / rows.length) * 100}%"></div></div>
-  <table><tr><td class="tag">Đã chi đúng</td><td class="n">${ok} dòng</td></tr><tr><td class="tag">Theo file chi</td><td class="n" style="font-weight:600">${vnd(fileT)}</td></tr><tr><td class="tag">Theo sao kê</td><td class="n" style="font-weight:600">${vnd(bankT)}</td></tr><tr><td class="tag">Chênh lệch</td><td class="n" style="font-weight:700;color:${bankT - fileT ? "var(--err)" : "var(--ok)"}">${bankT - fileT > 0 ? "+" : ""}${vnd(bankT - fileT)}</td></tr></table>
+  <table><tr><td class="tag">Đã chi đúng</td><td class="n">${ok} dòng</td></tr><tr><td class="tag">Theo file chi</td><td class="n" style="font-weight:600">${vnd(fileT)}</td></tr><tr><td class="tag">Theo sao kê</td><td class="n" style="font-weight:600">${vnd(bankT)}</td></tr><tr><td class="tag">Dòng lệch</td><td class="n" style="font-weight:700;color:${bad.length ? "var(--err)" : "var(--ok)"}">${bad.length ? bad.length + " dòng · " + vnd(badAmt) : "Không có"}</td></tr><tr><td class="tag">Chênh lệch tổng</td><td class="n" style="font-weight:700;color:${bankT - fileT ? "var(--err)" : "var(--ok)"}">${bankT - fileT > 0 ? "+" : ""}${vnd(bankT - fileT)}</td></tr></table>
   <div style="display:flex;flex-direction:column;gap:8px;margin-top:14px"><button class="btn" data-act="minutes" data-id="${cur.id}">${ic("out")}Biên bản đối chiếu</button>
   ${cur.status === "dachot" ? chip("ok", "Đợt chi đã chốt, đã vào sổ") : `<button class="btn p" data-act="closebatch" data-id="${cur.id}" ${left ? "disabled" : ""}>Chốt đợt chi${left ? ` (còn ${left} dòng)` : ""}</button>`}</div></div></div>`;
 }
@@ -1489,9 +1515,9 @@ function answer(q, file) {
   if (/phiếu chi|chi tiền mặt/.test(t)) return A("lapct", ["Đang hiểu nội dung chi", "Đang định khoản"], () => {
     const m = q.match(/(\d[\d.,]*)\s*(tr|triệu|k|nghìn)?/i), amt = m ? Math.round(parseFloat(m[1].replace(/[.,](?=\d{3})/g, "").replace(",", ".")) * ({ tr: 1e6, "triệu": 1e6, k: 1e3, "nghìn": 1e3 }[m[2]?.toLowerCase()] || 1)) : 2500000;
     const km = /văn phòng phẩm|vpp/.test(t) ? "6423" : /vận chuyển|ship/.test(t) ? "6417" : "6428";
-    const d = inv({ dir: "Chứng từ", partner: "Chi tiền mặt", mst: "—", no: "PC-" + String(Date.now()).slice(-4), date: "23/11", portal: "ctkhac", step: "choduyet", source: "AI lập từ chat", conf: 100, tax: 0, ctr: "111", op: "pay-expense", reason: "Lập từ yêu cầu trong chat: " + q, lines: [L(kmOf(km).name + " – chi tiền mặt", amt, km, 100)] });
+    const d = inv({ dir: "Chứng từ", partner: "Chi tiền mặt", mst: "—", no: "PC-" + String(Date.now()).slice(-4), date: TD, portal: "ctkhac", step: "choduyet", source: "AI lập từ chat", conf: 100, tax: 0, ctr: "111", op: "pay-expense", reason: "Lập từ yêu cầu trong chat: " + q, lines: [L(kmOf(km).name + " – chi tiền mặt", amt, km, 100)] });
     d.history.push([now(), "Agent Lập chứng từ lập phiếu chi theo yêu cầu của Kế toán Hạnh"]); S.invoices.unshift(d);
-    return `Đã lập phiếu chi nháp <b>${esc(d.no)}</b> ngày 23/11/2026:<table><tr><td>Nội dung</td><td>${esc(d.lines[0].desc)}</td></tr><tr><td>Khoản mục</td><td>${esc(kmOf(km).name)}</td></tr><tr><td>Số tiền</td><td><b>${vnd(amt)} ₫</b></td></tr><tr><td>Bằng chữ</td><td><i>${docSo(amt)}</i></td></tr></table>
+    return `Đã lập phiếu chi nháp <b>${esc(d.no)}</b> ngày ${TDY}:<table><tr><td>Nội dung</td><td>${esc(d.lines[0].desc)}</td></tr><tr><td>Khoản mục</td><td>${esc(kmOf(km).name)}</td></tr><tr><td>Số tiền</td><td><b>${vnd(amt)} ₫</b></td></tr><tr><td>Bằng chữ</td><td><i>${docSo(amt)}</i></td></tr></table>
       <div class="tag">Định khoản</div><table><tr><td>Nợ ${kmOf(km).acc} ${esc(ACC_NAME[kmOf(km).acc] || "")}</td><td class="n">${vnd(amt)}</td></tr><tr><td>Có 111 Tiền mặt</td><td class="n">${vnd(amt)}</td></tr></table>
       <div class="tag">Nhớ đính kèm hóa đơn hoặc giấy đề nghị thanh toán vào chứng từ.</div><div class="acts"><button class="btn s p" data-ai="open" data-id="${d.id}">Mở chứng từ</button><button class="btn s" data-ai="approve1" data-id="${d.id}">${ic("check")}Duyệt luôn</button></div>`;
   });
@@ -1530,7 +1556,7 @@ function answer(q, file) {
     const l = S.invoices.filter((i) => i.partner === "Global Apparel Sourcing" && i.dir === "Bán ra").slice(0, 4);
     return `Bản nháp thư nhắc nợ — bạn sửa rồi gửi từ email công ty:<pre style="white-space:pre-wrap;font:inherit;background:var(--panel);border:1px solid var(--line2);border-radius:10px;padding:12px;margin:8px 0">Kính gửi Global Apparel Sourcing,
 
-Công ty TNHH TM Việt Vương 3 xin thông báo số dư công nợ phải thu đến ngày 23/11/2026 là 2.170.000.000 đồng, gồm các hóa đơn:
+Công ty TNHH TM Việt Vương 3 xin thông báo số dư công nợ phải thu đến ngày ${TDY} là 2.170.000.000 đồng, gồm các hóa đơn:
 ${l.map((i) => `- ${i.no} ngày ${i.date}/2026: ${vnd(total(i))} đồng`).join("\n")}
 
 Kính đề nghị Quý công ty thanh toán theo hạn trong hợp đồng. Nếu số liệu có chênh lệch, xin phản hồi để hai bên đối chiếu.
@@ -1650,6 +1676,8 @@ document.addEventListener("click", (e) => {
     ledger: () => { pickMode = "ledger"; $("#filepick").accept = ""; $("#filepick").click(); },
     invview: () => { S.invView = t.dataset.v; render(); },
     tab: () => { S.tab = t.dataset.tab; render(); },
+    qyear: () => { S.per = { m: "year", v: 0 }; S.tab = "all"; render(); },
+    qclear: () => { S.q = ""; render(); },
     openinv: () => { S.open = +t.dataset.id; renderDrawer(); },
     icur: () => setCur(+t.dataset.id),
     openrow: () => { setCur(+t.dataset.id); openCur(); },
@@ -1767,7 +1795,7 @@ document.addEventListener("input", (e) => {
     $("#jr-box").innerHTML = journalHTML(i); [["#ft-sub", vnd(sub(i))], ["#ft-tax", vnd(i.tax)], ["#ft-tot", vnd(total(i))], ["#ft-words", total(i) ? docSo(total(i)) : "—"]].forEach(([q, v]) => { if ($(q)) $(q).textContent = v; }); return;
   }
   if (e.target.id === "dm-q") { S.dmQ = e.target.value; const pos = e.target.selectionStart; render(); const q = $("#dm-q"); q.focus(); q.setSelectionRange(pos, pos); }
-  if (e.target.id === "f-q") { S.q = e.target.value; const pos = e.target.selectionStart; render(); const q = $("#f-q"); q.focus(); q.setSelectionRange(pos, pos); }
+  if (e.target.id === "f-q") { if (e.isComposing) return; if (e.target.value.trim() && !S.q.trim()) S.tab = "all"; S.q = e.target.value; const pos = e.target.selectionStart; render(); const q = $("#f-q"); q.focus(); q.setSelectionRange(pos, pos); }
 });
 document.addEventListener("change", (e) => {
   if (e.target.dataset.ln && S.open) { renderDrawer(); return; }
