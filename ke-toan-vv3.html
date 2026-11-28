@@ -415,7 +415,11 @@ body:has(.drawer.full) .aifab{bottom:70px}
 .side .nav a.on{background:var(--sb-on);color:#fff;box-shadow:inset 3px 0 0 var(--act)}
 .side .nav a.on .badge,.side .badge{background:var(--act);color:#fff}
 .side .modes{background:#22262c}.side .modes button{color:var(--sb-mute)}.side .modes button.on{background:var(--sb-on);color:#fff}
-.side .agl .lh,.side .aia b{color:var(--sb-ink)}.side .aia:hover,.side .aia.on{background:var(--sb-on);border-color:transparent}
+.side .agl .lh,.side .aia b{color:var(--sb-ink)}
+.side .nav a.home{margin-top:4px;font-weight:600}.side .aav.grp{background:#454a52;color:#fff}.side .aav.add{border-color:#5b616b;color:var(--sb-mute)}
+.side .agl.sub{margin:2px 0 6px;padding:0 8px 0 18px}.side .agl.sub .lh{font:600 11.5px var(--font);color:var(--sb-mute);padding:6px 6px 4px}.side .agl.sub .lh button{color:var(--sb-mute);width:22px;height:22px;font-size:16px}
+.side .agl.sub .aia{padding:5px 8px;gap:8px;border-radius:3px}.side .agl.sub .aav{width:24px;height:24px;font-size:10px;box-shadow:none}.side .agl.sub .aav svg{width:12px;height:12px}
+.side .agl.sub .aia b{font-weight:500;font-size:12.5px}.side .agl.sub .aia small{display:none}.side .aia:hover,.side .aia.on{background:var(--sb-on);border-color:transparent}
 .btn.p{background:var(--act);color:#fff}.btn.p:hover{background:var(--act-ink)}
 .ibtn{display:inline-grid;place-items:center;min-width:30px;height:30px;border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--mute);font-size:16px;line-height:1;padding:0 6px}
 .ibtn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}.ibtn:disabled{opacity:.4;cursor:default}
@@ -575,7 +579,7 @@ const monthOf = (d) => +String(d).split("/")[1];
 const L = (desc, amt, km, conf, dept = "") => ({ id: ++seq, desc, amt, km, conf, dept, sugg: [km] });
 const inv = (o) => ({ id: ++seq, history: [], flagged: false, ...o });
 const S = {
-  view: "tong-quan", invView: "list", icur: null, ftab: "ht", showDoc: true, per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
+  view: "ai", invView: "list", icur: null, ftab: "ht", showDoc: true, per: { m: "month", v: 11 }, tcPer: { m: "month", v: 6 }, rsel: null, fmt: "pm", dmTab: "dims", dmType: "all", dmQ: "", rexp: new Set(), kmf: "all", tab: "choduyet", dir: "all", q: "", sel: new Set(), open: null,
   recent: ["6427", "6277"], memory: {}, ledgerTo: "31/10/2026", lastSync: "06:00 hôm nay", lots: 1,
   invoices: [
     inv({ dir: "Mua vào", partner: "Điện lực Vĩnh Long", mst: "0301234567", no: "1C26TAB-00001245", date: "12/11", portal: "khop", step: "choduyet", source: "Cổng thuế", conf: 94, tax: 1845000,
@@ -802,10 +806,9 @@ const NAV = [
   ["grp", "Cài đặt"], ["danh-muc", "Danh mục", "gear"],
 ];
 function renderNav() {
+  // Trang chủ là Trợ lý AI; danh sách agent mở ngay dưới mục này khi đang ở trang AI
   const agent = S.view === "ai";
-  const modes = `<div class="modes" role="group" aria-label="Chế độ"><button class="${agent ? "" : "on"}" data-act="mode" data-m="browse" aria-pressed="${!agent}">${ic("compass")}Browse</button><button class="${agent ? "on" : ""}" data-act="mode" data-m="agent" aria-pressed="${agent}">${ic("chat")}Agent</button></div>`;
-  if (agent) { $("#nav").innerHTML = modes + `<div class="agl">${listHTML()}</div>`; return; }
-  renderNav0(modes);
+  renderNav0(`<a href="#ai" class="home ${agent ? "on" : ""}">${ic("chat")}Trợ lý AI</a>${agent ? `<div class="agl sub">${listHTML()}</div>` : ""}`);
 }
 function renderNav0(modes) {
   const choDuyet = S.invoices.filter((i) => i.step === "choduyet").length;
@@ -815,7 +818,7 @@ function renderNav0(modes) {
 }
 function go() {
   const h = location.hash.slice(1);
-  S.view = h === "ai" || NAV.some(([k]) => k === h) ? h : "tong-quan";
+  S.view = h === "ai" || NAV.some(([k]) => k === h) ? h : "ai";
   if (S.view !== "ai") S.lastBrowse = S.view;
   closeLayer(); render();
 }
@@ -1643,7 +1646,6 @@ document.addEventListener("click", (e) => {
   const ci = curDoc();
   const act = {
     close: () => closeLayer(),
-    mode: () => nav(t.dataset.m === "agent" ? "ai" : S.lastBrowse || "tong-quan"),
     erp: () => toast(t.dataset.t + " dùng chung với ERP — mở trong ERP"),
     gotab: () => { S.tab = t.dataset.tab; S.invView = "list"; nav("hoa-don"); },
     ledger: () => { pickMode = "ledger"; $("#filepick").accept = ""; $("#filepick").click(); },
