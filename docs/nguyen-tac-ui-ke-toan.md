@@ -91,6 +91,17 @@ Bộ nguyên tắc dưới đây có 3 mức: **Bắt buộc** (thiếu là bị
 - Danh sách chứng từ: cột chuẩn, dòng tổng cộng, thanh công cụ, click chọn / double-click mở, ↑↓, ngăn chi tiết hạch toán phía dưới, mặc định lưới thay vì Kanban (B1–B8, F5).
 - Form chứng từ: tiêu đề loại + số, phần đầu 2 cột, tab Hạch toán / Thuế / Bút toán, cột TK Nợ–TK Có, nhập lưới bằng Enter, thanh nút đáy có phím tắt (C1–C7), chứng từ gốc ở ngăn phải (F3).
 
+Vòng 2 (bám sát khuôn AMIS):
+- Menu trái nền tối, nút hành động chính màu xanh lá, nút "Thêm ▾" tách đôi (nhập tay / tải hóa đơn / đồng bộ).
+- Danh sách: tab trạng thái có số đếm, "Thực hiện hàng loạt ▾", cột **Chức năng** cố định bên phải (Xem ▾: duyệt, bỏ duyệt, để xử lý sau, xem lịch sử), dòng phân trang "Tổng số: N bản ghi".
+- Form: tổng tiền thanh toán chữ lớn ở góc phải phần đầu, nút ‹ › và × trên tiêu đề, chân form nền tối: Hủy/Đóng bên trái, Cất… và nút xanh bên phải.
+
+UX tốt hơn MISA (giữ khuôn, thêm tiện):
+- Chuyển chứng từ trước / sau ngay trong form (‹ ›, PgUp/PgDn) — không phải đóng form, chọn dòng, mở lại.
+- Ngăn hạch toán dưới danh sách cập nhật khi chọn dòng, không cần mở chứng từ.
+- Chứng từ gốc (PDF/ảnh) đặt cạnh form để so khi nhập; AI điền sẵn, ô AI điền có đánh dấu.
+- "Theo bước" (Kanban) là chế độ xem phụ để dọn hàng chờ duyệt.
+
 Chưa làm (để vòng sau): tab Quy trình cho từng phân hệ (A3), ẩn/hiện cột (B10), xóa / nhân bản / in chứng từ, lọc theo từng cột.
 
 ## Nguồn

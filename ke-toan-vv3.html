@@ -407,6 +407,41 @@ body:has(.drawer.full) .aifab{bottom:70px}
 .ffoot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px max(16px,env(safe-area-inset-right,0px)) max(8px,env(safe-area-inset-bottom,0px)) 16px;background:var(--card);border-top:1px solid var(--line)}
 .ffoot .tag kbd{margin:0 2px}
 .fpanel{padding:10px 14px}
+/* ---- vòng 2: bám sát khuôn MISA AMIS (menu tối, nút chính xanh lá, cột Chức năng, phân trang, chân form tối) ---- */
+:root{--act:#2a9d36;--act-ink:#1f7f2a;--sb:#2b2f36;--sb-ink:#d5d9df;--sb-mute:#8c94a1;--sb-on:#3a404a}
+.side{background:var(--sb);border-right:0}
+.side .grp{color:var(--sb-mute)}
+.side .nav a{color:var(--sb-ink)}.side .nav a:hover{background:var(--sb-on)}
+.side .nav a.on{background:var(--sb-on);color:#fff;box-shadow:inset 3px 0 0 var(--act)}
+.side .nav a.on .badge,.side .badge{background:var(--act);color:#fff}
+.side .modes{background:#22262c}.side .modes button{color:var(--sb-mute)}.side .modes button.on{background:var(--sb-on);color:#fff}
+.side .agl .lh,.side .aia b{color:var(--sb-ink)}.side .aia:hover,.side .aia.on{background:var(--sb-on);border-color:transparent}
+.btn.p{background:var(--act);color:#fff}.btn.p:hover{background:var(--act-ink)}
+.ibtn{display:inline-grid;place-items:center;min-width:30px;height:30px;border:1px solid var(--line);border-radius:3px;background:var(--card);color:var(--mute);font-size:16px;line-height:1;padding:0 6px}
+.ibtn:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}.ibtn:disabled{opacity:.4;cursor:default}
+.ibtn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2}
+.split{display:inline-flex}.split .btn:first-child{border-radius:3px 0 0 3px}.split .btn:last-child{border-radius:0 3px 3px 0;border-left:1px solid rgba(255,255,255,.35);padding:4px 8px}
+.stabs{display:flex;gap:2px;flex-wrap:wrap}
+.stabs button{border:0;background:none;padding:6px 10px;color:var(--mute);border-bottom:2px solid transparent;font-weight:500}
+.stabs button span{display:inline-block;min-width:20px;padding:0 5px;margin-left:3px;border-radius:9px;background:var(--panel);font-size:11.5px;color:var(--mute)}
+.stabs button.on{color:var(--brand);border-bottom-color:var(--brand)}.stabs button.on span{background:var(--brand);color:#fff}
+.g th.ra,.g td.ra{position:sticky;right:0;background:var(--card);box-shadow:-1px 0 0 var(--line);white-space:nowrap;text-align:center;width:84px}
+.g th.ra{background:var(--th);z-index:2}.g tfoot td.ra{background:var(--th)}.g tr.sel td.ra{background:var(--sel)}
+.g td.ra .lnk{font-weight:500}
+.rmb{border:0;background:none;color:var(--brand);padding:0 4px;margin-left:6px;border-left:1px solid var(--line)}
+.pager{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:5px 10px;background:var(--card);border:1px solid var(--line);border-top:0;font-size:12.5px;color:var(--mute)}
+.pager b{color:var(--ink)}.pager select.inp{padding:2px 6px}.pager .ibtn{height:24px;min-width:24px}
+.pop.menu{width:240px;padding:4px 0}.pop.menu button.o{align-items:center;padding:7px 12px}.pop.menu button.o:disabled{color:var(--mute);opacity:.55;cursor:default;background:none}
+.fnav{display:inline-flex;gap:4px;align-items:center}
+.xbtn{font-size:20px}
+.fhd{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 220px}
+.ftot{text-align:right;border-left:1px solid var(--line2);padding-left:18px;align-self:center}
+.ftot b{display:block;font:700 26px var(--font);font-variant-numeric:tabular-nums;margin:2px 0;color:var(--ink)}
+.ffoot{background:#33373e;border-top:0;color:#c9ced6}
+.ffoot .tag{color:#aab1bb}.ffoot kbd{background:#454a52;border-color:#5b616b;color:#d5d9df}
+.ffoot .btn:not(.g):not(.p){background:transparent;color:#fff;border-color:#6b717b}.ffoot .btn:not(.g):not(.p):hover{background:#454a52}
+.ffoot .btn.g{background:var(--act)}
+@media (max-width:1100px){.ftot{border-left:0;padding-left:0;text-align:left}}
 @media (max-width:1100px){.fbody{grid-template-columns:1fr}.fdoc{position:static}.fhd{grid-template-columns:1fr}.fsum{grid-template-columns:1fr}}
 @media (max-width:860px){.tb .logo{width:auto}.tb .logo .t,.tbi,.tb .user span:last-child{display:none}.side{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid var(--line)}.main{padding:12px 16px 40px}}
 </style>
@@ -872,21 +907,19 @@ function vInv() {
   const selN = [...S.sel].filter((id) => rows.some((r) => r.id === id)).length;
   const tot = (f) => vnd(rows.reduce((s, i) => s + f(i), 0));
   return head + `<div class="tbar">
-    <button class="btn p" data-act="newdoc" title="Thêm chứng từ (F4)">${ic("doc")}Thêm <kbd>F4</kbd></button>
-    <button class="btn" data-act="newupload">${ic("up")}Tải hóa đơn lên</button>
-    <button class="btn" data-act="opencur" ${cur ? "" : "disabled"} title="Mở chứng từ đang chọn (Enter)">Xem / Sửa <kbd>Enter</kbd></button>
-    <span class="vr"></span>
-    <button class="btn g" data-act="tapprove" title="Duyệt chứng từ đã tích, hoặc dòng đang chọn (Ctrl+G)">${ic("check")}Duyệt${selN ? " " + selN : ""} <kbd>Ctrl+G</kbd></button>
-    <button class="btn" data-act="tunapprove" ${cur?.step === "daduyet" ? "" : "disabled"}>Bỏ duyệt</button>
-    <span class="vr"></span>
-    <button class="btn" data-act="sync" id="syncbtn">${ic("sync")}Đồng bộ cổng thuế</button>
-    <button class="btn" data-act="invxls">${ic("out")}Xuất Excel</button>
-    <span class="sp"></span><div class="seg">${tabs.map(([k, t, n]) => `<button class="${S.tab === k ? "on" : ""}" data-act="tab" data-tab="${k}">${t} (${n})</button>`).join("")}</div></div>
-  <div class="gridw"><table class="g" id="invgrid"><thead><tr><th style="width:30px"></th><th>Ngày hạch toán</th><th>Ngày chứng từ</th><th>Số chứng từ</th><th>Loại</th><th>Đối tượng</th><th>Diễn giải</th><th class="n">Tiền hàng</th><th class="n">Thuế GTGT</th><th class="n">Tổng tiền</th><th>Cổng thuế</th><th>Trạng thái</th></tr></thead>
+    <div class="stabs" role="tablist">${tabs.map(([k, t, n]) => `<button role="tab" class="${S.tab === k ? "on" : ""}" data-act="tab" data-tab="${k}">${t} <span>${n}</span></button>`).join("")}</div>
+    <span class="sp"></span>
+    <button class="btn" data-act="bulkmenu" ${selN ? "" : "disabled"} title="Tích chọn chứng từ để thực hiện hàng loạt">Thực hiện hàng loạt${selN ? ` (${selN})` : ""} ▾</button>
+    <button class="ibtn" data-act="sync" id="syncbtn" title="Đồng bộ cổng thuế">${ic("sync")}</button>
+    <button class="ibtn" data-act="invxls" title="Xuất Excel">${ic("out")}</button>
+    <span class="split"><button class="btn p" data-act="newdoc" title="Thêm chứng từ (F4)">Thêm <kbd>F4</kbd></button><button class="btn p" data-act="addmenu" aria-label="Chọn cách thêm">▾</button></span></div>
+  <div class="gridw"><table class="g" id="invgrid"><thead><tr><th style="width:30px"><input type="checkbox" class="cb" data-act="pickall" aria-label="Chọn tất cả chứng từ duyệt được" ${rows.some(canBulk) && rows.filter(canBulk).every((i) => S.sel.has(i.id)) ? "checked" : ""}></th><th>Ngày hạch toán</th><th>Ngày chứng từ</th><th>Số chứng từ</th><th>Loại</th><th>Đối tượng</th><th>Diễn giải</th><th class="n">Tiền hàng</th><th class="n">Thuế GTGT</th><th class="n">Tổng tiền</th><th>Cổng thuế</th><th>Trạng thái</th><th class="ra">Chức năng</th></tr></thead>
   <tbody>${rows.map((i) => `<tr class="click ${i.id === S.icur ? "sel" : ""}" data-act="icur" data-id="${i.id}"><td>${canBulk(i) ? `<input type="checkbox" class="cb" data-act="pick" data-id="${i.id}" ${S.sel.has(i.id) ? "checked" : ""} aria-label="Chọn">` : ""}</td>
     <td>${i.date}/2026</td><td>${i.date}/2026</td><td>${esc(i.no)}</td><td>${i.dir === "Bán ra" ? "Bán hàng" : i.dir === "Chứng từ" ? "Chi phí" : "Mua hàng"}</td><td>${esc(i.partner)}</td><td class="dg" title="${esc(dgOf(i))}">${esc(dgOf(i))}</td>
-    <td class="n">${vnd(sub(i))}</td><td class="n">${vnd(i.tax)}</td><td class="n" style="font-weight:600">${vnd(total(i))}</td><td>${chip(...PORTAL[i.portal])}</td><td class="${STCLS[i.step]}">${STEPS[i.step][0]}${i.source.startsWith("AI") ? ` <span class="ai">AI</span>` : ""}</td></tr>`).join("") || `<tr><td colspan="12" class="tag" style="padding:16px">Không có chứng từ nào.</td></tr>`}</tbody>
-  <tfoot><tr><td></td><td colspan="6">Tổng cộng · ${rows.length} chứng từ</td><td class="n">${tot(sub)}</td><td class="n">${tot((i) => i.tax)}</td><td class="n">${tot(total)}</td><td></td><td></td></tr></tfoot></table></div>
+    <td class="n">${vnd(sub(i))}</td><td class="n">${vnd(i.tax)}</td><td class="n" style="font-weight:600">${vnd(total(i))}</td><td>${chip(...PORTAL[i.portal])}</td><td class="${STCLS[i.step]}">${STEPS[i.step][0]}${i.source.startsWith("AI") ? ` <span class="ai">AI</span>` : ""}</td>
+    <td class="ra"><button class="lnk" data-act="openrow" data-id="${i.id}">Xem</button><button class="rmb" data-act="rowmenu" data-id="${i.id}" aria-label="Thêm chức năng">▾</button></td></tr>`).join("") || `<tr><td colspan="13" class="tag" style="padding:16px">Không có chứng từ nào.</td></tr>`}</tbody>
+  <tfoot><tr><td></td><td colspan="6">Tổng cộng</td><td class="n">${tot(sub)}</td><td class="n">${tot((i) => i.tax)}</td><td class="n">${tot(total)}</td><td></td><td></td><td class="ra"></td></tr></tfoot></table></div>
+  <div class="pager">Tổng số: <b>${rows.length}</b> bản ghi<span class="sp"></span>Số bản ghi/trang <select class="inp" aria-label="Số bản ghi mỗi trang"><option>50</option><option>100</option><option>200</option></select><span>${rows.length ? 1 : 0} – ${rows.length} bản ghi</span><button class="ibtn" disabled aria-label="Trang trước">‹</button><button class="ibtn" disabled aria-label="Trang sau">›</button></div>
   <div class="dpn" id="idetail">${detailPane(cur)}</div>`;
 }
 // Chọn dòng không vẽ lại cả trang — để double-click vẫn rơi đúng dòng
@@ -932,9 +965,10 @@ function renderDrawer() {
     ${i.portal === "chuafile" ? `<button class="btn" data-act="attach">${ic("up")}Bổ sung file</button>` : ""}
     ${i.portal === "lech" || i.portal === "dieuchinh" ? `<button class="btn" data-act="resolve">Đã xử lý xong</button>` : ""}
     ${i.flagged ? `<button class="btn" data-act="unflag">Bỏ “để xử lý sau”</button>` : ""}`;
+  const footL = `<button class="btn" data-act="close">${isNew ? "Hủy" : "Đóng"} <kbd>Esc</kbd></button>`;
   const foot = isNew
-    ? `<button class="btn" data-act="close">Hủy <kbd>Esc</kbd></button><button class="btn" data-act="dsave" data-mode="draft" title="Lưu chứng từ, ở lại màn hình">Cất <kbd>Ctrl+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="new">Cất và thêm <kbd>Ctrl+Shift+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="close">Cất và đóng <kbd>Ctrl+Q</kbd></button><button class="btn g" data-act="dsave" data-mode="approve">${ic("check")}Cất và duyệt <kbd>Ctrl+G</kbd></button>`
-    : `<button class="btn" data-act="close">Đóng <kbd>Esc</kbd></button>${locked ? "" : i.step === "daduyet" ? `<button class="btn" data-act="unapprove">Bỏ duyệt</button>` : `<button class="btn g" data-act="approve" ${PROBLEM.includes(i.portal) ? "disabled title='Xử lý trạng thái cổng thuế trước'" : ""}>${ic("check")}Duyệt <kbd>Ctrl+G</kbd></button>`}`;
+    ? `<button class="btn" data-act="dsave" data-mode="draft" title="Lưu chứng từ, ở lại màn hình">Cất <kbd>Ctrl+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="new">Cất và thêm <kbd>Ctrl+Shift+S</kbd></button><button class="btn" data-act="dsave" data-mode="draft" data-after="close">Cất và đóng <kbd>Ctrl+Q</kbd></button><button class="btn g" data-act="dsave" data-mode="approve">${ic("check")}Cất và duyệt <kbd>Ctrl+G</kbd></button>`
+    : `${locked ? "" : i.step === "daduyet" ? `<button class="btn" data-act="unapprove">Bỏ duyệt</button>` : `<button class="btn g" data-act="approve" ${PROBLEM.includes(i.portal) ? "disabled title='Xử lý trạng thái cổng thuế trước'" : ""}>${ic("check")}Duyệt <kbd>Ctrl+G</kbd></button>`}`;
   const lineRows = i.lines.map((l, n) => { const a = kmOf(l.km).acc; return `<tr><td class="tag">${n + 1}</td>
       <td>${isNew ? `<input class="inp" data-ln="desc" data-id="${l.id}" value="${esc(l.desc)}" placeholder="Hàng hóa, dịch vụ">` : esc(l.desc)}</td>
       ${isNew ? `<td><input class="inp n" data-ln="qty" data-id="${l.id}" value="${l.qty ?? 1}" inputmode="decimal"></td><td><input class="inp n" data-ln="price" data-id="${l.id}" value="${l.price ? vnd(l.price) : ""}" inputmode="numeric"></td>` : ""}
@@ -958,11 +992,13 @@ function renderDrawer() {
     ls: `<div class="fpanel" style="display:flex;flex-direction:column;gap:8px">${isNew && !i.history.length ? `<div class="tag">Chứng từ chưa lưu.</div>` : i.history.slice().reverse().map(([t, h]) => `<div><span class="tag">${esc(t)}</span> · ${esc(h)}</div>`).join("")}</div>`,
   };
   $("#layer").innerHTML = `<aside class="drawer full" role="dialog" aria-label="${esc(title)}">
-  <div class="fh"><button class="back" data-act="close">← Danh sách</button>
+  <div class="fh">
     <div style="flex:1;min-width:220px"><div class="ttl">${esc(title)}${i.no ? `<small>${esc(i.no)}</small>` : ""}</div>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:2px">${isNew ? `<span class="tag">Chưa lưu</span>` : `<span class="${STCLS[i.step]}" style="font-weight:600">${STEPS[i.step][0]}</span>${chip(...PORTAL[i.portal])}<span class="ai">AI tin cậy ${i.conf}%</span>`}</div></div>
     ${ctxBtns}
-    <button class="btn" data-act="togdoc" aria-pressed="${showDoc}">${showDoc ? "Ẩn" : "Hiện"} chứng từ gốc</button></div>
+    <button class="btn" data-act="togdoc" aria-pressed="${showDoc}">${showDoc ? "Ẩn" : "Hiện"} chứng từ gốc</button>
+    ${isNew ? "" : (() => { const ids = invRows().map((x) => x.id), k = ids.indexOf(i.id); return `<span class="fnav"><button class="ibtn" data-act="fprev" ${k > 0 ? "" : "disabled"} title="Chứng từ trước (PgUp)" aria-label="Chứng từ trước">‹</button><span class="tag">${k >= 0 ? k + 1 + "/" + ids.length : ""}</span><button class="ibtn" data-act="fnext" ${k >= 0 && k < ids.length - 1 ? "" : "disabled"} title="Chứng từ sau (PgDn)" aria-label="Chứng từ sau">›</button></span>`; })()}
+    <button class="ibtn" data-act="keys" title="Phím tắt (F1)" aria-label="Phím tắt">?</button><button class="ibtn xbtn" data-act="close" title="Đóng (Esc)" aria-label="Đóng">×</button></div>
   <div class="fbody ${showDoc ? "" : "nodoc"}"><div class="fmain">
     ${i.fresh ? `<div class="note">${chip("ok", "AI đọc xong")} Đã điền thông tin và ${i.lines.length} dòng từ <b>${esc(i.fileName || "")}</b>. Ô tô tím là AI điền — kiểm tra, chỉnh khoản mục hoặc tách dòng rồi ${isNew ? "cất" : "duyệt"}.</div>` : ""}
     ${lech}${warnP}
@@ -976,13 +1012,13 @@ function renderDrawer() {
         ${fld("Ngày hạch toán", "", i.date + "/2026", "", false)}
         ${fld(doc ? "Ngày chứng từ" : "Ngày hóa đơn", "date", i.date + "/2026")}
         ${doc ? fld("Số chứng từ", "num", num, "Để trống sẽ tự đánh số") : fld("Ký hiệu HĐ", "series", series, "Ví dụ 1C26TAA") + fld("Số hóa đơn", "num", num)}
-      </div></div></section>
+      </div><div class="ftot"><div class="tag">Tổng tiền thanh toán</div><b id="ftot-v">${vnd(total(i))}</b><div class="tag">Tiền hàng ${vnd(sub(i))} · Thuế ${vnd(i.tax)}</div></div></div></section>
     <section class="fsec"><div class="ftabs" role="tablist">${tabsDef.map(([k, t]) => `<button role="tab" class="${k === ftab ? "on" : ""}" data-act="ftab" data-t="${k}" aria-selected="${k === ftab}">${t}</button>`).join("")}</div>
       ${tabsDef.map(([k]) => `<div data-fp="${k}" ${k === ftab ? "" : "hidden"}>${panels[k]}</div>`).join("")}
       <div class="fsum" style="border-top:1px solid var(--line)"><div><span class="tag">Số tiền bằng chữ:</span> <span class="inwords">${total(i) ? docSo(total(i)) : "—"}</span>${i.reason ? `<div class="tag" style="margin-top:6px">AI gợi ý khoản mục vì: ${esc(i.reason)}</div>` : ""}</div><div id="sum-box">${sumHTML(i)}</div></div></section>
   </div>
   <aside class="fdoc">${docBox}</aside></div>
-  <div class="ffoot"><span class="tag">Enter: sang ô kế · <kbd>Ctrl+Insert</kbd> thêm dòng · <kbd>F1</kbd> phím tắt</span><span class="sp"></span>${foot}</div>
+  <div class="ffoot">${footL}<span class="tag">${isNew ? `Enter: sang ô kế · <kbd>Ctrl+Insert</kbd> thêm dòng` : `<kbd>PgUp</kbd> <kbd>PgDn</kbd> chứng từ trước / sau`} · <kbd>F1</kbd> phím tắt</span><span class="sp"></span>${foot}</div>
   </aside>`;
 }
 const nav = (h) => (location.hash === "#" + h ? render() : (location.hash = h));
@@ -1587,6 +1623,16 @@ document.addEventListener("click", (e) => {
     tab: () => { S.tab = t.dataset.tab; render(); },
     openinv: () => { S.open = +t.dataset.id; renderDrawer(); },
     icur: () => setCur(+t.dataset.id),
+    openrow: () => { setCur(+t.dataset.id); openCur(); },
+    pickall: () => { const ok = invRows().filter(canBulk); const on = ok.every((i) => S.sel.has(i.id)); ok.forEach((i) => (on ? S.sel.delete(i.id) : S.sel.add(i.id))); render(); },
+    rowmenu: () => { const id = +t.dataset.id, i = S.invoices.find((x) => x.id === id); setCur(id);
+      menuPop(t, [["Xem / sửa", () => openCur(), false, "Enter"], ["Duyệt", () => approveCur(), !canApprove(i), "Ctrl+G"], ["Bỏ duyệt", () => { i.step = "choduyet"; i.history.push([now(), "Kế toán Hạnh bỏ duyệt"]); render(); toast("Đã bỏ duyệt " + i.no); }, i.step !== "daduyet"],
+        ["Để xử lý sau", () => { i.flagged = true; if (i.step === "daduyet") i.step = "choduyet"; i.history.push([now(), "Kế toán Hạnh để xử lý sau"]); render(); toast("Đã chuyển sang Cần xử lý"); }, i.step === "canxuly" || i.step === "daxuat"],
+        ["Xem lịch sử", () => { S.ftab = "ls"; openCur(); }, false]]); },
+    bulkmenu: () => menuPop(t, [["Duyệt các chứng từ đã chọn", () => approveCur(), false, "Ctrl+G"], ["Xuất Excel các chứng từ đã chọn", () => { const r = S.invoices.filter((i) => S.sel.has(i.id)); filePreview(`Chứng từ đã chọn (${r.length})`, ["Ngày", "Số chứng từ", "Đối tượng", "Tổng tiền", "Trạng thái"], r.map((i) => [i.date + "/2026", i.no, i.partner, total(i), STEPS[i.step][0]])); }, false], ["Bỏ chọn tất cả", () => { S.sel.clear(); render(); }, false]]),
+    addmenu: () => menuPop(t, [["Lập chứng từ (nhập tay)", () => newDraft(false), false, "F4"], ["Tải hóa đơn lên (AI đọc)", () => newDraft(true), false], ["Đồng bộ từ cổng thuế", () => $("#syncbtn")?.click(), false]]),
+    fprev: () => stepDoc(-1),
+    fnext: () => stepDoc(1),
     opencur: () => openCur(),
     tapprove: () => approveCur(),
     tunapprove: () => { const i = S.invoices.find((x) => x.id === S.icur); if (i?.step !== "daduyet") return; i.step = "choduyet"; i.history.push([now(), "Kế toán Hạnh bỏ duyệt"]); render(); toast("Đã bỏ duyệt " + i.no); },
@@ -1689,7 +1735,7 @@ document.addEventListener("input", (e) => {
     const i = curDoc(), l = i.lines.find((x) => x.id === +e.target.dataset.id), k = e.target.dataset.ln, v = e.target.value;
     l[k] = k === "price" ? +v.replace(/\D/g, "") || 0 : k === "qty" ? +v.replace(",", ".") || 0 : v;
     recalc(i); const cell = $("#lna-" + l.id); if (cell) cell.textContent = vnd(l.amt);
-    $("#jr-box").innerHTML = journalHTML(i); $("#sum-box").innerHTML = sumHTML(i); return;
+    $("#jr-box").innerHTML = journalHTML(i); $("#sum-box").innerHTML = sumHTML(i); if ($("#ftot-v")) $("#ftot-v").textContent = vnd(total(i)); return;
   }
   if (e.target.id === "dm-q") { S.dmQ = e.target.value; const pos = e.target.selectionStart; render(); const q = $("#dm-q"); q.focus(); q.setSelectionRange(pos, pos); }
   if (e.target.id === "f-q") { S.q = e.target.value; const pos = e.target.selectionStart; render(); const q = $("#f-q"); q.focus(); q.setSelectionRange(pos, pos); }
@@ -1725,6 +1771,22 @@ document.addEventListener("change", (e) => {
   }
 });
 /* ---- Phím tắt kiểu MISA / Fast (docs/nguyen-tac-ui-ke-toan.md, mục E) ---- */
+// Menu thả xuống nhỏ (dùng chung cho Thêm ▾, Thực hiện hàng loạt ▾, ▾ cuối dòng). items: [nhãn, hàm, tắt?, phím]
+function menuPop(btn, items) {
+  document.querySelector(".pop")?.remove();
+  const r = btn.getBoundingClientRect(), pop = document.createElement("div");
+  pop.className = "pop menu"; pop.style.position = "fixed"; pop.style.top = Math.min(window.innerHeight - 40 * items.length - 16, r.bottom + 4) + "px"; pop.style.left = Math.max(8, Math.min(window.innerWidth - 248, r.right - 240)) + "px";
+  pop.innerHTML = items.map(([t, , off, k], n) => `<button class="o" data-mi="${n}" ${off ? "disabled" : ""}><span>${esc(t)}</span>${k ? `<kbd>${k}</kbd>` : ""}</button>`).join("");
+  pop.onclick = (e) => { const b = e.target.closest("[data-mi]"); if (!b || b.disabled) return; pop.remove(); items[+b.dataset.mi][1](); };
+  document.body.append(pop); pop.querySelector("button:not(:disabled)")?.focus();
+  setTimeout(() => document.addEventListener("mousedown", function off(ev) { if (!pop.contains(ev.target)) { pop.remove(); document.removeEventListener("mousedown", off); } }), 0);
+}
+// Sang chứng từ trước / sau trong danh sách đang lọc mà không phải đóng form
+function stepDoc(d) {
+  if (S.open === "draft") return;
+  const ids = invRows().map((x) => x.id), k = ids.indexOf(S.open), n = ids[k + d];
+  if (n == null) return; S.open = n; S.icur = n; renderDrawer();
+}
 function openCur() { if (S.icur != null) { S.open = S.icur; renderDrawer(); } }
 function approveCur() {
   const ids = S.sel.size ? [...S.sel] : [S.icur];
@@ -1734,7 +1796,7 @@ function approveCur() {
   S.sel.clear(); S.exSel = null; render(); toast(`Đã duyệt ${ok.length} chứng từ`);
 }
 const KEYS = [["Danh sách chứng từ", [["F4", "Thêm chứng từ"], ["↑ ↓", "Chọn dòng trên / dưới"], ["Enter, F3", "Mở chứng từ đang chọn"], ["Ctrl+G", "Duyệt chứng từ đã tích hoặc đang chọn"]]],
-  ["Form chứng từ", [["Ctrl+S", "Cất"], ["Ctrl+Shift+S", "Cất và thêm"], ["Ctrl+Q", "Cất và đóng"], ["Ctrl+G", "Duyệt / Cất và duyệt"], ["Enter", "Sang ô kế; ô cuối thì thêm dòng"], ["Ctrl+Insert", "Thêm dòng"], ["Ctrl+Delete", "Xóa dòng đang đứng"], ["Esc", "Đóng"]]],
+  ["Form chứng từ", [["PgUp, PgDn", "Chứng từ trước / sau"], ["Ctrl+S", "Cất"], ["Ctrl+Shift+S", "Cất và thêm"], ["Ctrl+Q", "Cất và đóng"], ["Ctrl+G", "Duyệt / Cất và duyệt"], ["Enter", "Sang ô kế; ô cuối thì thêm dòng"], ["Ctrl+Insert", "Thêm dòng"], ["Ctrl+Delete", "Xóa dòng đang đứng"], ["Esc", "Đóng"]]],
   ["Chung", [["Alt+X", "Tìm nhanh"], ["F1", "Bảng phím tắt"]]]];
 function keysHelp() {
   modal(`<div class="mh"><div style="flex:1"><h3>Phím tắt</h3><div class="tag">Theo thói quen MISA (Ctrl+S, Ctrl+Q…) và Fast (F4, F3).</div></div><button class="x" data-act="close" aria-label="Đóng">×</button></div>
@@ -1752,6 +1814,7 @@ document.addEventListener("keydown", (e) => {
     if (ctrl && e.shiftKey && (k === "S" || k === "s")) return sv("draft", "new");
     if (ctrl && (k === "s" || k === "S")) return sv("draft");
     if (ctrl && (k === "q" || k === "Q")) return isNew ? sv("draft", "close") : (e.preventDefault(), closeLayer());
+    if ((k === "PageUp" || k === "PageDown") && !typing(e.target)) { e.preventDefault(); return stepDoc(k === "PageUp" ? -1 : 1); }
     if (ctrl && (k === "g" || k === "G")) { e.preventDefault(); return $('.ffoot [data-act="approve"]:not(:disabled), .ffoot [data-mode="approve"]')?.click(); }
     if (ctrl && k === "Insert" && isNew) { e.preventDefault(); d.lines.push(blankLine()); renderDrawer(); return setTimeout(() => document.querySelector(`[data-ln="desc"][data-id="${d.lines.at(-1).id}"]`)?.focus(), 0); }
     if (ctrl && k === "Delete" && isNew && e.target.dataset?.ln && d.lines.length > 1) { e.preventDefault(); d.lines = d.lines.filter((l) => l.id !== +e.target.dataset.id); return renderDrawer(); }
