@@ -447,7 +447,7 @@ body:has(.drawer.full) .aifab{bottom:70px}
 .fhd{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr)}
 .fck{padding:10px 14px}
 .fckh{display:flex;gap:12px;align-items:center;margin-bottom:8px;flex-wrap:wrap}.fckh .prog{flex:1;min-width:120px;max-width:260px;height:6px}
-.ckl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px}
+.ckl{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:6px}.fdoc .ckl{grid-template-columns:1fr}
 .cki{display:flex;gap:9px;align-items:center;padding:6px 8px;border:1px solid var(--line2);border-radius:3px;background:var(--panel)}
 .cki>div{flex:1;min-width:0}.cki b{display:block;font-weight:500}.cki small{display:block;color:var(--mute);font-size:11.5px}
 .cki i{font-style:normal;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10.5px;font-weight:800;flex-shrink:0}
@@ -1029,7 +1029,7 @@ function renderDrawer() {
     <button class="ibtn" data-act="keys" title="Phím tắt (F1)" aria-label="Phím tắt">?</button><button class="ibtn xbtn" data-act="close" title="Đóng (Esc)" aria-label="Đóng">×</button></div>
   <div class="fbody ${showDoc ? "" : "nodoc"}"><div class="fmain">
     ${i.fresh ? `<div class="note">${chip("ok", "AI đọc xong")} Đã điền thông tin và ${i.lines.length} dòng từ <b>${esc(i.fileName || "")}</b>. Ô tô tím là AI điền — kiểm tra, chỉnh khoản mục hoặc tách dòng rồi ${isNew ? "cất" : "duyệt"}.</div>` : ""}
-    ${ckHTML}
+    ${showDoc ? "" : ckHTML}
     <section class="fsec"><div class="fhd"><div>
         ${isNew ? `<div class="ff"><span>Nghiệp vụ</span><select data-invf="op">${["Mua hàng", "Bán hàng", "Thu – chi"].map((g) => `<optgroup label="${g}">${OPS.filter((o) => o[0] === g).map((o) => `<option value="${o[1]}" ${o[1] === i.op ? "selected" : ""}>${o[2]}</option>`).join("")}</optgroup>`).join("")}</select><span></span></div>` : ""}
         ${fld(sale ? "Khách hàng" : doc ? "Đối tượng" : "Nhà cung cấp", "partner", i.partner, "Chọn đối tượng")}
@@ -1045,7 +1045,7 @@ function renderDrawer() {
       ${tabsDef.map(([k]) => `<div data-fp="${k}" ${k === ftab ? "" : "hidden"}>${panels[k]}</div>`).join("")}
       ${i.reason ? `<div class="tag" style="padding:8px 14px;border-top:1px solid var(--line2)">AI gợi ý khoản mục vì: ${esc(i.reason)}</div>` : ""}</section>
   </div>
-  <aside class="fdoc">${docBox}</aside></div>
+  <aside class="fdoc">${docBox}${showDoc ? ckHTML : ""}</aside></div>
   <div class="ffoot">${footL}<span class="tag">${isNew ? `Enter: sang ô kế · <kbd>Ctrl+Insert</kbd> thêm dòng` : `<kbd>PgUp</kbd> <kbd>PgDn</kbd> chứng từ trước / sau`} · <kbd>F1</kbd> phím tắt</span><span class="sp"></span>${foot}</div>
   </aside>`;
 }
